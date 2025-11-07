@@ -1,10 +1,8 @@
 <template>
   <a :href="item.url" target="_blank" 
-     class="card-container flex items-start bg-white dark:bg-gray-700 p-3 sm:p-4 rounded shadow-md transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] border-2 border-transparent relative">
-    
+     class="card-container flex items-start bg-white dark:bg-gray-700 p-3 sm:p-4 rounded shadow-md transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] border-2 border-transparent relative">    
     <!-- 调整图标大小 -->
-    <img :src="item.icon" alt="icon" class="w-8 h-8 sm:w-12 sm:h-12 mr-3 sm:mr-4" />
-    
+    <img :src="item.icon" alt="icon" class="w-8 h-8 sm:w-12 sm:h-12 mr-3 sm:mr-4"   
     <div class="flex-1">
       <!-- 调整标题大小 -->
       <h3 class="text-base sm:text-lg font-bold">{{ item.name }}</h3>
