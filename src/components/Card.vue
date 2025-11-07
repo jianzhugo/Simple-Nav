@@ -31,26 +31,68 @@
   box-sizing: border-box; 
 }
 
-/* 移除自定义提示框相关样式 */
+/* 多颜色呼吸效果边框动画 */
 .card-container:hover {
-  animation: borderPulse 2s infinite;
+  animation: multiColorBreath 6s ease-in-out infinite;
 }
 
-@keyframes borderPulse {
-  0% { border-color: rgba(216, 180, 254, 0.5); }
-  50% { border-color: rgba(184, 61, 143, 0.8); }
-  100% { border-color: rgba(216, 180, 254, 0.5); }
+@keyframes multiColorBreath {
+  0%, 100% {
+    border-color: rgba(216, 180, 254, 0.3); /* 浅紫色 */
+    box-shadow: 0 0 5px rgba(216, 180, 254, 0.2);
+  }
+  16.6% {
+    border-color: rgba(184, 61, 143, 0.8); /* 深粉色 */
+    box-shadow: 0 0 15px rgba(184, 61, 143, 0.5);
+  }
+  33.3% {
+    border-color: rgba(59, 130, 246, 0.3); /* 浅蓝色 */
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    border-color: rgba(29, 78, 216, 0.8); /* 深蓝色 */
+    box-shadow: 0 0 15px rgba(29, 78, 216, 0.5);
+  }
+  66.6% {
+    border-color: rgba(34, 197, 94, 0.3); /* 浅绿色 */
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.2);
+  }
+  83.3% {
+    border-color: rgba(21, 128, 61, 0.8); /* 深绿色 */
+    box-shadow: 0 0 15px rgba(21, 128, 61, 0.5);
+  }
 }
 
-/* 修复黑暗模式样式 - 使用全局选择器 */
+/* 深色模式下的多颜色呼吸效果 */
 :global(.dark) .card-container:hover {
-  animation: borderPulseDark 2s infinite;
+  animation: multiColorBreathDark 4s ease-in-out infinite;
 }
 
-@keyframes borderPulseDark {
-  0% { border-color: rgba(147, 51, 234, 0.5); }
-  50% { border-color: rgba(168, 85, 247, 0.8); }
-  100% { border-color: rgba(147, 51, 234, 0.5); }
+@keyframes multiColorBreathDark {
+  0%, 100% {
+    border-color: rgba(147, 51, 234, 0.3); /* 浅紫色 */
+    box-shadow: 0 0 5px rgba(147, 51, 234, 0.2);
+  }
+  16.6% {
+    border-color: rgba(168, 85, 247, 0.8); /* 深紫色 */
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+  }
+  33.3% {
+    border-color: rgba(96, 165, 250, 0.3); /* 浅蓝色 */
+    box-shadow: 0 0 5px rgba(96, 165, 250, 0.2);
+  }
+  50% {
+    border-color: rgba(59, 130, 246, 0.8); /* 深蓝色 */
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+  }
+  66.6% {
+    border-color: rgba(52, 211, 153, 0.3); /* 浅绿色 */
+    box-shadow: 0 0 5px rgba(52, 211, 153, 0.2);
+  }
+  83.3% {
+    border-color: rgba(16, 185, 129, 0.8); /* 深绿色 */
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+  }
 }
 </style>
 
