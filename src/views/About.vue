@@ -102,7 +102,7 @@
               <h3 class="text-xl font-semibold mb-2">数据统计</h3>
               <div class="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div class="text-2xl font-bold text-blue-500">105个</div>
+                  <div class="text-2xl font-bold text-blue-500">117个</div>
                   <div class="text-sm text-gray-500">收录网站</div>
                 </div>
                 <div>
@@ -110,7 +110,7 @@
                   <div class="text-sm text-gray-500">可用性监测</div>
                 </div>
                 <div>
-                  <div class="text-2xl font-bold text-green-500">2025-05-14</div>
+                  <div class="text-2xl font-bold text-green-500">2025-12-17</div>
                   <div class="text-sm text-gray-500">手动更新</div>
                 </div>
               </div>
