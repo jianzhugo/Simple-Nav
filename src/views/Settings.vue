@@ -157,8 +157,76 @@
               </div>
             </div>
             
+            <!-- 配置导入导出 -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+              <h3 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-exchange-alt text-green-500 mr-2"></i>
+                配置导入导出
+              </h3>
+              <div class="space-y-4">
+                <!-- 配置项选择 -->
+                <div>
+                  <h4 class="text-lg font-medium mb-2">选择要导入/导出的配置项：</h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <label class="flex items-center gap-2">
+                      <input v-model="exportOptions.darkMode" type="checkbox" class="rounded text-blue-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">黑暗模式</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input v-model="exportOptions.columns" type="checkbox" class="rounded text-blue-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">布局列数</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input v-model="exportOptions.background" type="checkbox" class="rounded text-blue-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">背景设置</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input v-model="exportOptions.categoryIcons" type="checkbox" class="rounded text-blue-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">分类图标</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input v-model="exportOptions.apiConfig" type="checkbox" class="rounded text-blue-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">API配置</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <!-- 导出配置 -->
+                <div class="flex gap-4">
+                  <button
+                    @click="exportConfig"
+                    class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded"
+                  >
+                    <i class="fas fa-download mr-2"></i>导出配置
+                  </button>
+                  
+                  <!-- 导入配置 -->
+                  <div class="relative">
+                    <input
+                      type="file"
+                      ref="fileInput"
+                      accept=".json"
+                      class="absolute inset-0 opacity-0 cursor-pointer"
+                      @change="importConfig"
+                    >
+                    <button
+                      class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded"
+                    >
+                      <i class="fas fa-upload mr-2"></i>导入配置
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- 导入结果提示 -->
+                <div v-if="importMessage" class="p-3 rounded-lg" :class="importMessageType === 'success' ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'">
+                  <i :class="importMessageType === 'success' ? 'fas fa-check-circle mr-2' : 'fas fa-exclamation-circle mr-2'"></i>
+                  {{ importMessage }}
+                </div>
+              </div>
+            </div>
+            
             <!-- 分类图标设置 -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow mt-6">
               <!-- 折叠面板头部 -->
               <div 
                 class="p-6 cursor-pointer flex justify-between items-center" 
@@ -318,7 +386,17 @@ export default {
       ],
       isIconSettingsExpanded: false,
       // 为每个分类创建独立的下拉状态
-      showIconDropdown: {}
+      showIconDropdown: {},
+      // 导入导出配置相关变量
+      exportOptions: {
+        darkMode: true,
+        columns: true,
+        background: true,
+        categoryIcons: true,
+        apiConfig: false // 默认不导出API配置，保护敏感信息
+      },
+      importMessage: '',
+      importMessageType: ''
     }
   },
   // 移除与侧边栏相关的所有方法和props
@@ -419,6 +497,144 @@ export default {
       }
       localStorage.setItem('categoryIcons', JSON.stringify(this.categoryIcons))
       alert('分类图标已重置为默认值')
+    },
+    
+    // 导出配置
+    exportConfig() {
+      try {
+        const config = {
+          version: '1.0',
+          exportDate: new Date().toISOString(),
+          settings: {}
+        };
+        
+        // 根据选择的选项导出配置
+        if (this.exportOptions.darkMode) {
+          config.settings.darkMode = localStorage.getItem('darkMode') === 'true';
+        }
+        
+        if (this.exportOptions.columns) {
+          config.settings.columns = localStorage.getItem('columns');
+        }
+        
+        if (this.exportOptions.background) {
+          config.settings.background = localStorage.getItem('background');
+          config.settings.backgroundImage = localStorage.getItem('backgroundImage');
+          config.settings.customColor = localStorage.getItem('customColor');
+        }
+        
+        if (this.exportOptions.categoryIcons) {
+          config.settings.categoryIcons = JSON.parse(localStorage.getItem('categoryIcons') || '{}');
+        }
+        
+        if (this.exportOptions.apiConfig) {
+          config.settings.apiKey = localStorage.getItem('apiKey');
+          config.settings.datasheetId = localStorage.getItem('datasheetId');
+          config.settings.viewId = localStorage.getItem('viewId');
+        }
+        
+        // 生成JSON文件并下载
+        const dataStr = JSON.stringify(config, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `nav-settings-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('导出配置失败:', error);
+        this.importMessage = '导出配置失败，请重试';
+        this.importMessageType = 'error';
+        setTimeout(() => {
+          this.importMessage = '';
+        }, 3000);
+      }
+    },
+    
+    // 导入配置
+    importConfig(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const config = JSON.parse(e.target.result);
+          if (!config.settings) {
+            throw new Error('无效的配置文件格式');
+          }
+          
+          const { settings } = config;
+          
+          // 根据配置项导入
+          if (settings.darkMode !== undefined) {
+            localStorage.setItem('darkMode', settings.darkMode);
+          }
+          
+          if (settings.columns) {
+            localStorage.setItem('columns', settings.columns);
+            this.columns = parseInt(settings.columns);
+          }
+          
+          if (settings.background) {
+            localStorage.setItem('background', settings.background);
+            document.body.style.backgroundColor = settings.background;
+          }
+          
+          if (settings.backgroundImage) {
+            localStorage.setItem('backgroundImage', settings.backgroundImage);
+            document.body.style.backgroundImage = `url('${settings.backgroundImage}')`;
+          }
+          
+          if (settings.customColor) {
+            localStorage.setItem('customColor', settings.customColor);
+            this.customColorHex = settings.customColor;
+          }
+          
+          if (settings.categoryIcons) {
+            localStorage.setItem('categoryIcons', JSON.stringify(settings.categoryIcons));
+            this.categoryIcons = { ...settings.categoryIcons };
+          }
+          
+          if (settings.apiKey) {
+            localStorage.setItem('apiKey', settings.apiKey);
+            this.apiKey = settings.apiKey;
+          }
+          
+          if (settings.datasheetId) {
+            localStorage.setItem('datasheetId', settings.datasheetId);
+            this.datasheetId = settings.datasheetId;
+          }
+          
+          if (settings.viewId) {
+            localStorage.setItem('viewId', settings.viewId);
+            this.viewId = settings.viewId;
+          }
+          
+          // 显示导入成功消息
+          this.importMessage = '配置导入成功！页面将刷新以应用新配置';
+          this.importMessageType = 'success';
+          
+          // 3秒后刷新页面
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        } catch (error) {
+          console.error('导入配置失败:', error);
+          this.importMessage = '导入配置失败，请检查文件格式';
+          this.importMessageType = 'error';
+          setTimeout(() => {
+            this.importMessage = '';
+          }, 3000);
+        }
+      };
+      reader.readAsText(file);
+      
+      // 重置文件输入，允许重复选择同一文件
+      event.target.value = '';
     },
     applyCustomColor() {
       const colorRegex = /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
