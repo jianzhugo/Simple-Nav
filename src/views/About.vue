@@ -68,11 +68,11 @@
                 <p>🚀 带娃建筑师 | AI技术学习者 | 个人博主</p>
                 <p>🏠 个人主页： 
                   <a 
-                    href="https://jianzhugo.cn" 
+                    href="https://www.jianzhugo.cn" 
                     target="_blank"
                     class="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 underline"
                   >
-                    水常@Shui Chang
+                    水常&Shui Chang
                   </a>
                 </p>
                 <p>🌐 个人博客： 
@@ -84,13 +84,20 @@
                     建筑G博客
                   </a>
                 </p>
-                <p>💰 另一AI网页成品： 
+                <p>💰 更多AI作品： 
                   <a 
                     href="https://donate.jianzhugo.cn" 
                     target="_blank"
                     class="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 underline"
                   >
                     打赏页面
+                  </a>
+                  <a 
+                    href="https://love.jianzhugo.cn" 
+                    target="_blank"
+                    class="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 underline"
+                  >
+                    情侣网站
                   </a>
                 </p>
               </div>
@@ -102,7 +109,7 @@
               <h3 class="text-xl font-semibold mb-2">数据统计</h3>
               <div class="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div class="text-2xl font-bold text-blue-500">105个</div>
+                  <div class="text-2xl font-bold text-blue-500">{{ websiteCount }}个</div>
                   <div class="text-sm text-gray-500">收录网站</div>
                 </div>
                 <div>
@@ -110,8 +117,8 @@
                   <div class="text-sm text-gray-500">可用性监测</div>
                 </div>
                 <div>
-                  <div class="text-2xl font-bold text-green-500">2025-05-14</div>
-                  <div class="text-sm text-gray-500">手动更新</div>
+                  <div class="text-2xl font-bold text-green-500">{{ lastUpdateTime || '2025-12-17' }}</div>
+                  <div class="text-sm text-gray-500">自动更新</div>
                 </div>
               </div>
             </div>
@@ -125,14 +132,39 @@
 
 <script>
 import Footer from '../components/Footer.vue';
+import { fetchData } from '../api/fetchData';
 
 export default {
   components: { Footer },
   data() {
     return {
-      darkMode: localStorage.getItem('darkMode') === 'true'
+      darkMode: localStorage.getItem('darkMode') === 'true',
+      websiteCount: 0,
+      lastUpdateTime: ''
+    }
+  },
+  async created() {
+    try {
+      const data = await fetchData();
+      this.websiteCount = data.length;
+      
+      // 找出最新的更新时间
+      if (data.length > 0) {
+        // 筛选出有更新时间的记录
+        const recordsWithUpdateTime = data.filter(item => item.updatedAt);
+        if (recordsWithUpdateTime.length > 0) {
+          // 找出最新的时间
+          const latestRecord = recordsWithUpdateTime.reduce((latest, current) => {
+            return new Date(current.updatedAt) > new Date(latest.updatedAt) ? current : latest;
+          });
+          // 格式化时间为 YYYY-MM-DD
+          this.lastUpdateTime = new Date(latestRecord.updatedAt).toISOString().split('T')[0];
+        }
+      }
+    } catch (error) {
+      console.error('获取数据失败:', error);
+      this.websiteCount = 0;
     }
   }
-  // 完全移除created钩子和categories数据
 }
 </script>

@@ -37,6 +37,11 @@ export async function fetchData() {
       throw new Error(`返回数据格式不正确: ${JSON.stringify(responseData)}`);
     }
     
+    // 打印第一条记录的完整信息，查看是否包含更新时间
+    if (responseData.data.records.length > 0) {
+      console.log('完整记录信息:', responseData.data.records[0]);
+    }
+    
     return responseData.data.records.map(record => {
       if (!record.fields || !record.fields.category || !record.fields.name) {
         console.warn('缺少必填字段的记录:', record);
@@ -50,6 +55,8 @@ export async function fetchData() {
         description: record.fields.description || '',
         icon: record.fields.icon || DEFAULT_ICON_URL,
         sortOrder: record.fields.order ? parseInt(record.fields.order) : 0,
+        // 添加更新时间字段（如果API返回）
+        updatedAt: record.updatedAt || record.fields.updatedAt || null
       };
     }).filter(Boolean).sort((a, b) => b.sortOrder - a.sortOrder);  // 修改排序逻辑为降序
   } catch (error) {
