@@ -49,6 +49,14 @@
     
     <!-- 右侧按钮区域 -->
     <div class="flex items-center gap-3">
+      <!-- 新增提交按钮 -->
+      <button
+        @click="showPasswordDialog = true"
+        class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
+      >
+        <i class="fas fa-plus-circle hover:scale-110 transition-transform duration-300"></i>
+      </button>
+      
       <!-- 新增设置按钮 -->
       <router-link 
         to="/settings"
@@ -73,12 +81,35 @@
         <i class="fas hover:rotate-12 transition-transform" :class="darkMode ? 'fa-sun' : 'fa-moon' "></i>
       </button>
     </div>
+    
+    <!-- 密码验证对话框 -->
+    <PasswordDialog
+      :visible="showPasswordDialog"
+      :categories="categories"
+      @close="showPasswordDialog = false"
+      @password-validated="showAddWebsiteDialog = true"
+    />
+    
+    <!-- 网址添加对话框 -->
+    <AddWebsiteDialog
+      :visible="showAddWebsiteDialog"
+      :categories="categories"
+      @close="showAddWebsiteDialog = false"
+      @submit="handleSubmitWebsite"
+    />
   </nav>
 </template>
 
 <script>
+import PasswordDialog from './PasswordDialog.vue';
+import AddWebsiteDialog from './AddWebsiteDialog.vue';
+
 export default {
-  props: ['darkMode'],
+  components: {
+    PasswordDialog,
+    AddWebsiteDialog
+  },
+  props: ['darkMode', 'categories'],
   data() {
     return {
       showEngines: false,
@@ -111,7 +142,9 @@ export default {
         baidu: 'fas fa-paw',
         google: 'fab fa-google', 
         local: 'fas fa-search'
-      }
+      },
+      showPasswordDialog: false,
+      showAddWebsiteDialog: false
     };
   },
   methods: {
@@ -127,6 +160,16 @@ export default {
           const url = this.engines[this.selectedEngine].url + encodeURIComponent(this.searchQuery);
           window.open(url, '_blank');
         }
+      }
+    },
+    
+    // 处理网址提交
+    async handleSubmitWebsite(websiteData) {
+      try {
+        // 调用父组件传递的提交方法
+        await this.$emit('submit-website', websiteData);
+      } catch (error) {
+        console.error('提交网站失败:', error);
       }
     }
   }
