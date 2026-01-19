@@ -10,7 +10,12 @@
       />
       <main class="flex-1 flex flex-col p-4 overflow-y-auto">
         <!-- 移除宽度限制容器，直接使用Navbar -->
-        <Navbar :darkMode="darkMode" @toggle-dark-mode="toggleDarkMode" class="mb-6"/>
+        <Navbar 
+          :darkMode="darkMode" 
+          :categories="categories"
+          @toggle-dark-mode="toggleDarkMode" 
+          @submit-website="handleSubmitWebsite"
+          class="mb-6"/>
         
         <div class="flex-grow">
           <!-- 加载状态 -->
@@ -73,7 +78,7 @@ html, body {
 </style>
 
 <script>
-import { fetchData } from './api/fetchData';
+import { fetchData, addWebsite } from './api/fetchData';
 import Navbar from './components/Navbar.vue';
 import Sidebar from './components/Sidebar.vue';
 import Card from './components/Card.vue';
@@ -153,6 +158,18 @@ export default {
     toggleSidebar() {
       this.isSidebarCollapsed = !this.isSidebarCollapsed;
     },
+    // 处理网址提交
+    async handleSubmitWebsite(websiteData) {
+      try {
+        // 调用API提交数据
+        await addWebsite(websiteData);
+        // 重新加载数据，更新分类列表
+        await this.loadData();
+      } catch (error) {
+        console.error('提交网站失败:', error);
+        throw error;
+      }
+    },
     // 可以移除的冗余代码
     handleGlobalClick(event) {
     // 改用document.querySelector获取元素
@@ -170,11 +187,11 @@ export default {
       this.isSidebarCollapsed = window.innerWidth < 768
       // 添加调试日志（可选）
       console.log('窗口尺寸变化:', window.innerWidth, '侧边栏状态:', this.isSidebarCollapsed)
-    },
-    watch: {
-      '$route.query.category'(newCategory) {
-        this.selectedCategory = newCategory || null;
-      }
+    }
+  },
+  watch: {
+    '$route.query.category'(newCategory) {
+      this.selectedCategory = newCategory || null;
     }
   },
   created() {
