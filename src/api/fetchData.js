@@ -82,10 +82,10 @@ export async function addWebsite(websiteData) {
       throw new Error('API配置不完整，请前往设置页面配置');
     }
     
-    // 动态构建API URL
-    const apiUrl = `${baseUrl}/${datasheetId}/records`;
+    // 动态构建API URL，添加fieldKey参数
+    const apiUrl = `${baseUrl}/${datasheetId}/records?fieldKey=name`;
     
-    // 构造请求体
+    // 构造请求体，添加fieldKey字段，order字段转换为字符串
     const requestBody = {
       records: [
         {
@@ -95,10 +95,11 @@ export async function addWebsite(websiteData) {
             url: websiteData.url,
             icon: websiteData.icon,
             description: websiteData.description,
-            order: websiteData.order
+            order: websiteData.order.toString()
           }
         }
-      ]
+      ],
+      fieldKey: "name"
     };
     
     const response = await fetch(apiUrl, {
