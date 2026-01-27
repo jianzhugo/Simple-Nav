@@ -2,7 +2,7 @@
   <nav class="h-12 sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-md px-4 py-2 flex justify-between items-center">
     <!-- 修改为 router-link 以实现跳转 -->
     <router-link to="/" class="text-xl font-bold text-blue-500">
-      <i class="fas fa-globe"></i> 要简单导航站
+      <i class="fas fa-heart"></i> 少即是多
     </router-link>
     
     <!-- 修改搜索区域显示逻辑 -->
@@ -48,38 +48,51 @@
     </div>
     
     <!-- 右侧按钮区域 -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-0">
       <!-- 新增提交按钮 -->
-      <button
-        @click="showPasswordDialog = true"
-        class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
-      >
-        <i class="fas fa-plus-circle hover:scale-110 transition-transform duration-300"></i>
-      </button>
+      <div class="relative group w-8 h-8 flex items-center justify-center">
+        <button
+          @click="showPasswordDialog = true"
+          class="w-full h-full flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
+        >
+          <i class="fas fa-plus-circle hover:scale-110 transition-transform duration-300"></i>
+        </button>
+        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">添加网站</span>
+      </div>
       
       <!-- 新增设置按钮 -->
-      <router-link 
-        to="/settings"
-        class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
-      >
-        <i class="fas fa-cog hover:rotate-90 transition-transform duration-300"></i>
-      </router-link>
+      <div class="relative group w-8 h-8 flex items-center justify-center">
+        <router-link 
+          to="/settings"
+          class="w-full h-full flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
+        >
+          <i class="fas fa-cog hover:rotate-90 transition-transform duration-300"></i>
+        </router-link>
+        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">设置</span>
+      </div>
+      
       <!-- 新增GitHub图标 -->
-      <a 
-        href="https://github.com/jianzhugo/Simple-Nav" 
-        target="_blank"
-        class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
-      >
-        <i class="fab fa-github text-xl hover:rotate-12 transition-transform"></i>
-      </a>
+      <div class="relative group w-8 h-8 flex items-center justify-center">
+        <a 
+          href="https://github.com/jianzhugo/Simple-Nav" 
+          target="_blank"
+          class="w-full h-full flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
+        >
+          <i class="fab fa-github hover:rotate-12 transition-transform"></i>
+        </a>
+        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">GitHub</span>
+      </div>
       
       <!-- 原有的暗黑模式切换按钮 -->
-      <button 
-        @click="$emit('toggleDarkMode')" 
-        class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
-      >
-        <i class="fas hover:rotate-12 transition-transform" :class="darkMode ? 'fa-sun' : 'fa-moon' "></i>
-      </button>
+      <div class="relative group w-8 h-8 flex items-center justify-center">
+        <button 
+          @click="$emit('toggleDarkMode')" 
+          class="w-full h-full flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
+        >
+          <i class="fas hover:rotate-12 transition-transform" :class="darkMode ? 'fa-sun' : 'fa-moon' "></i>
+        </button>
+        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">{{ darkMode ? '浅色模式' : '暗黑模式' }}</span>
+      </div>
     </div>
     
     <!-- 密码验证对话框 -->
