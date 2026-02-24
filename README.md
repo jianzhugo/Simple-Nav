@@ -62,9 +62,30 @@
 
 ![获取](https://nav.jianzhugo.cn/img/demo7.png)
 
+### 配置方法
+
+#### 方法一：通过设置界面配置
 在设置中填入相应的APIkey、datasheetId、viewId。
 
 ![api](https://cdn.jsdmirror.com/gh/jianzhugo/image01/20251217130610676.png)
+
+#### 方法二：通过环境变量配置
+
+可以通过创建 `.env` 文件或在部署平台设置环境变量来配置，变量名如下：
+
+- `VITE_VIKA_API_KEY`：维格云 API 密钥
+- `VITE_VIKA_DATASHEET_ID`：维格云表格 ID
+- `VITE_VIKA_VIEW_ID`：维格云视图 ID
+
+**配置示例**（.env 文件）：
+
+```env
+VITE_VIKA_API_KEY=your_api_key_here
+VITE_VIKA_DATASHEET_ID=your_datasheet_id_here
+VITE_VIKA_VIEW_ID=your_view_id_here
+```
+
+**优先级说明**：环境变量配置优先于设置界面配置。如果同时设置了环境变量和界面配置，系统会优先使用环境变量的值。
 
 3、自定义分类图标
 

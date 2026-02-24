@@ -134,7 +134,8 @@
                   </button>
                 </div>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                  配置说明：登录维基云表格，在「设置」-「API」中获取API密钥；表格ID和视图ID可在表格URL中找到。
+                 <li> 配置说明：登录维基云表格，在「设置」-「API」中获取API密钥；表格ID和视图ID可在表格URL中找到。</li>
+                 <li> 环境变量配置：除了在页面上配置外，还可以通过环境变量进行配置，优先级：环境变量 > 本地存储。</li>
                 </p>
               </div>
             </div>

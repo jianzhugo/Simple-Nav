@@ -5,9 +5,9 @@ const DEFAULT_ICON_URL = '/default.ico';
 export async function fetchData() {
   try {
     // 从localStorage读取API配置
-    const apiKey = localStorage.getItem('apiKey');
-    const datasheetId = localStorage.getItem('datasheetId');
-    const viewId = localStorage.getItem('viewId');
+    const apiKey = import.meta.env.VITE_VIKA_API_KEY || localStorage.getItem('apiKey');
+    const datasheetId = import.meta.env.VITE_VIKA_DATASHEET_ID || localStorage.getItem('datasheetId');
+    const viewId = import.meta.env.VITE_VIKA_VIEW_ID || localStorage.getItem('viewId');
     
     // 检查配置是否完整
     if (!apiKey || !datasheetId || !viewId) {
@@ -73,9 +73,9 @@ export async function fetchData() {
 // 添加网址到维格云表格
 export async function addWebsite(websiteData) {
   try {
-    // 从localStorage读取API配置
-    const apiKey = localStorage.getItem('apiKey');
-    const datasheetId = localStorage.getItem('datasheetId');
+    // 优先从环境变量获取API配置，回退到本地存储
+    const apiKey = import.meta.env.VITE_VIKA_API_KEY || localStorage.getItem('apiKey');
+    const datasheetId = import.meta.env.VITE_VIKA_DATASHEET_ID || localStorage.getItem('datasheetId');
     
     // 检查配置是否完整
     if (!apiKey || !datasheetId) {
