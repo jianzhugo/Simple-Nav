@@ -35,7 +35,7 @@
 
 [表格链接](https://vika.cn/share/shrxaWuBbbn6cKWBwvXgV/dstfGaY66aN2wyLlmX/viwullRf3ubdS)
 
-![表格](https://nav.shuichanga.cn/img/demo1.png)
+![表格](https://nav.shuichanga.cn/img/demo2.png)
 
 ## 安装布署
 
