@@ -29,13 +29,13 @@
 
 [https://nav.shuichanga.cn](https://nav.shuichanga.cn)
 
-!\[演示站]\(https\://nav.shuichanga.cn/img/demo1.png null)
+![演示站](https://nav.shuichanga.cn/img/demo1.png)
 
 ## 维基云表格
 
 [表格链接](https://vika.cn/share/shrxaWuBbbn6cKWBwvXgV/dstfGaY66aN2wyLlmX/viwullRf3ubdS)
 
-!\[表格]\(https\://nav.shuichanga.cn/img/demo2.png null)
+![表格](https://nav.shuichanga.cn/img/demo1.png)
 
 ## 安装布署
 
@@ -55,7 +55,7 @@
 
 4、在构建部署配置中按下图填写，然后点完成就可以了。
 
-!\[配置]\(https\://nav.shuichanga.cn/img/demo3.png null)
+![配置](https://nav.shuichanga.cn/img/demo3.png)
 
 5、在项目设置中，将“环境变量”中的“VITE\_API\_PASSWORD”设置为你自己的密码。（用于直接增加网址功能）
 
@@ -63,11 +63,11 @@
 
 1、在维基云注册账号，新建表格。表格格式如下
 
-!\[格式]\(https\://nav.shuichanga.cn/img/demo4.png null)
+![格式](https://nav.shuichanga.cn/img/demo4.png)
 
 2、获取表格的APIkey、datasheetId、viewId
 
-!\[获取]\(https\://nav.shuichanga.cn/img/demo7.png null)
+![获取](https://nav.shuichanga.cn/img/demo7.png)
 
 ### 配置方法
 
@@ -75,7 +75,7 @@
 
 在设置中填入相应的APIkey、datasheetId、viewId。
 
-!\[api]\(https\://cdn.jsdmirror.com/gh/jianzhugo/image01/20251217130610676.png null)
+![api](https://cdn.jsdmirror.com/gh/jianzhugo/image01/20251217130610676.png)
 
 #### 方法二：通过环境变量配置
 
@@ -99,7 +99,7 @@ VITE_VIKA_VIEW_ID=your_view_id_here
 
 在设置中自定义分类图标。
 
-!\[图标映射]\(https\://cdn.jsdmirror.com/gh/jianzhugo/image01/20251217130740909.png null)
+![图标映射](https://cdn.jsdmirror.com/gh/jianzhugo/image01/20251217130740909.png)
 
 4、配置导入导出
 
@@ -113,7 +113,7 @@ VITE_VIKA_VIEW_ID=your_view_id_here
 ## 直接增加网址
 
 点击右上角的“+”号，输入网址和分类，即可直接增加网址。（需验证密码）
-!\[api]\(https\://nav.shuichanga.cn/img/zengjiawangzhi.png null)
+![api](https://nav.shuichanga.cn/img/zengjiawangzhi.png )
 
 ## 其它
 
