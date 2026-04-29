@@ -58,6 +58,7 @@
 ![配置](https://nav.shuichanga.cn/img/demo3.png)
 
 5、在项目设置中，将“环境变量”中的“VITE\_API\_PASSWORD”设置为你自己的密码。（用于直接增加网址功能）
+![获取](https://nav.shuichanga.cn/img/mima.png)
 
 #### 二、改数据
 
