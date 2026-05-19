@@ -52,7 +52,7 @@
             >
               <template v-for="(item, index) in filteredItems" :key="item.id">
                 <!-- 卡片必须放在广告条件判断之前 -->
-                <Card :item="item" @favorite-changed="handleFavoriteChanged" />
+                <Card :item="item" @favorite-changed="handleFavoriteChanged" @edit="handleEditClick" @delete="handleDeleteClick" />
                 <!-- 修正广告显示逻辑 -->
                 <AdBanner 
                   v-if="index === 9" 
@@ -66,6 +66,25 @@
         <Footer class="mt-8" />
       </main>
     </div>
+    
+    <Teleport to="body">
+      <PasswordDialog
+        :visible="showPasswordDialog"
+        :categories="categories"
+        @close="showPasswordDialog = false"
+        @password-validated="handlePasswordValidated"
+      />
+    </Teleport>
+    
+    <Teleport to="body">
+      <EditWebsiteDialog
+        :visible="showEditDialog"
+        :categories="categories.filter(c => c !== '我的收藏')"
+        :websiteData="editingItem"
+        @close="showEditDialog = false"
+        @submit="handleEditSubmit"
+      />
+    </Teleport>
   </div>
 </template>
 
@@ -78,12 +97,14 @@ html, body {
 </style>
 
 <script>
-import { fetchData, addWebsite } from './api/fetchData';
+import { fetchData, addWebsite, deleteWebsite, updateWebsite } from './api/fetchData';
 import Navbar from './components/Navbar.vue';
 import Sidebar from './components/Sidebar.vue';
 import Card from './components/Card.vue';
-import Footer from './components/Footer.vue';  // 确保导入Footer组件
-import AdBanner from './components/AdBanner.vue'  // 确保导入广告组件
+import Footer from './components/Footer.vue';
+import AdBanner from './components/AdBanner.vue';
+import PasswordDialog from './components/PasswordDialog.vue';
+import EditWebsiteDialog from './components/EditWebsiteDialog.vue';
 
 export default {
   components: { 
@@ -91,7 +112,9 @@ export default {
     Sidebar, 
     Card, 
     Footer,
-    AdBanner // 必须在此注册广告组件
+    AdBanner,
+    PasswordDialog,
+    EditWebsiteDialog
   },
   data() {
     return {
@@ -102,7 +125,12 @@ export default {
       darkMode: localStorage.getItem('darkMode') === 'true',
       isSidebarCollapsed: window.innerWidth < 768, // 初始化时根据屏幕宽度判断
       loading: false,
-      error: null
+      error: null,
+      showPasswordDialog: false,
+      passwordAction: null,
+      pendingItem: null,
+      showEditDialog: false,
+      editingItem: null
     };
   },
   computed: {
@@ -197,8 +225,64 @@ export default {
       console.log('窗口尺寸变化:', window.innerWidth, '侧边栏状态:', this.isSidebarCollapsed)
     },
     handleFavoriteChanged() {
-      // 当收藏状态变化时，重新计算筛选结果
       this.$forceUpdate();
+    },
+    isPasswordValidated() {
+      const validatedAt = parseInt(localStorage.getItem('passwordValidatedAt')) || 0;
+      return (Date.now() - validatedAt) < 60 * 60 * 1000;
+    },
+    handleEditClick(item) {
+      this.passwordAction = 'edit';
+      this.pendingItem = item;
+      if (this.isPasswordValidated()) {
+        this.handlePasswordValidated();
+      } else {
+        this.showPasswordDialog = true;
+      }
+    },
+    handleDeleteClick(item) {
+      this.passwordAction = 'delete';
+      this.pendingItem = item;
+      if (this.isPasswordValidated()) {
+        this.handlePasswordValidated();
+      } else {
+        this.showPasswordDialog = true;
+      }
+    },
+    handlePasswordValidated() {
+      if (this.passwordAction === 'edit') {
+        this.editingItem = this.pendingItem;
+        this.showEditDialog = true;
+      } else if (this.passwordAction === 'delete') {
+        if (confirm(`确定要删除「${this.pendingItem.name}」吗？`)) {
+          this.handleDeleteConfirm(this.pendingItem);
+        }
+      }
+      this.passwordAction = null;
+      this.pendingItem = null;
+    },
+    async handleDeleteConfirm(item) {
+      try {
+        await deleteWebsite(item.id);
+        await this.loadData();
+        alert('删除成功！');
+      } catch (error) {
+        console.error('删除网站失败:', error);
+        alert('删除失败：' + error.message);
+      }
+    },
+    async handleEditSubmit({ recordId, data }) {
+      try {
+        await updateWebsite(recordId, data);
+        this.showEditDialog = false;
+        await this.$nextTick();
+        this.editingItem = null;
+        await this.loadData();
+        alert('修改成功！');
+      } catch (error) {
+        console.error('修改网站失败:', error);
+        alert('修改失败：' + error.message);
+      }
     }
   },
   watch: {

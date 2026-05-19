@@ -17,18 +17,34 @@
       </p>
     </div>
     
-    <!-- 收藏按钮 -->
-    <button 
-      @click.prevent.stop="toggleFavorite" 
-      class="favorite-btn absolute top-1 right-1 cursor-pointer transition-all duration-300 z-10"
-      :class="{
-        'text-yellow-500 opacity-50': isFavorite,
-        'text-gray-400 opacity-0 hover:opacity-100': !isFavorite
-      }"
-      style="font-size: 18px; padding: 4px; background: none; border: none;"
-    >
-      <i class="fas fa-star"></i>
-    </button>
+    <!-- 操作按钮组 -->
+    <div class="card-actions absolute top-1 right-1 flex items-center gap-1 z-10">
+      <button 
+        @click.prevent.stop="handleEdit"
+        class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-blue-500 transition-all duration-300"
+        style="font-size: 14px; padding: 2px; background: none; border: none;"
+      >
+        <i class="fas fa-pen"></i>
+      </button>
+      <button 
+        @click.prevent.stop="handleDelete"
+        class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-red-500 transition-all duration-300"
+        style="font-size: 14px; padding: 2px; background: none; border: none;"
+      >
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      <button 
+        @click.prevent.stop="toggleFavorite" 
+        class="action-btn cursor-pointer transition-all duration-300"
+        :class="{
+          'text-yellow-500 opacity-50': isFavorite,
+          'text-gray-400 opacity-0 hover:opacity-100': !isFavorite
+        }"
+        style="font-size: 16px; padding: 2px; background: none; border: none;"
+      >
+        <i class="fas fa-star"></i>
+      </button>
+    </div>
   </a>
 </template>
 
@@ -66,18 +82,25 @@
   100% { border-color: rgba(147, 51, 234, 0.5); }
 }
 
-.favorite-btn {
+.action-btn {
   cursor: pointer;
   background: none;
   border: none;
-  font-size: 18px;
-  padding: 4px;
   z-index: 10;
   position: relative;
 }
 
-/* 确保未收藏的按钮在卡片悬停时显示 */
-.card-container:hover .favorite-btn:not(.text-yellow-500) {
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.card-container:hover .action-btn.opacity-0 {
+  opacity: 1 !important;
+}
+
+.card-container:hover .card-actions .action-btn:not(.text-yellow-500) {
   opacity: 1 !important;
 }
 </style>
@@ -109,8 +132,13 @@ export default {
       localStorage.setItem('favoriteItems', JSON.stringify(favorites));
       this.favoriteItems = favorites;
       
-      // 触发自定义事件，通知父组件收藏状态变化
       this.$emit('favorite-changed');
+    },
+    handleEdit() {
+      this.$emit('edit', this.item);
+    },
+    handleDelete() {
+      this.$emit('delete', this.item);
     }
   }
 };

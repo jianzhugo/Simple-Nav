@@ -52,7 +52,7 @@
       <!-- 新增提交按钮 -->
       <div class="relative group w-8 h-8 flex items-center justify-center">
         <button
-          @click="showPasswordDialog = true"
+          @click="handleAddClick"
           class="w-full h-full flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
         >
           <i class="fas fa-plus-circle hover:scale-110 transition-transform duration-300"></i>
@@ -96,20 +96,24 @@
     </div>
     
     <!-- 密码验证对话框 -->
-    <PasswordDialog
-      :visible="showPasswordDialog"
-      :categories="categories"
-      @close="showPasswordDialog = false"
-      @password-validated="showAddWebsiteDialog = true"
-    />
+    <Teleport to="body">
+      <PasswordDialog
+        :visible="showPasswordDialog"
+        :categories="categories"
+        @close="showPasswordDialog = false"
+        @password-validated="showAddWebsiteDialog = true"
+      />
+    </Teleport>
     
     <!-- 网址添加对话框 -->
-    <AddWebsiteDialog
-      :visible="showAddWebsiteDialog"
-      :categories="categories"
-      @close="showAddWebsiteDialog = false"
-      @submit="handleSubmitWebsite"
-    />
+    <Teleport to="body">
+      <AddWebsiteDialog
+        :visible="showAddWebsiteDialog"
+        :categories="categories"
+        @close="showAddWebsiteDialog = false"
+        @submit="handleSubmitWebsite"
+      />
+    </Teleport>
   </nav>
 </template>
 
@@ -161,6 +165,17 @@ export default {
     };
   },
   methods: {
+    isPasswordValidated() {
+      const validatedAt = parseInt(localStorage.getItem('passwordValidatedAt')) || 0;
+      return (Date.now() - validatedAt) < 60 * 60 * 1000;
+    },
+    handleAddClick() {
+      if (this.isPasswordValidated()) {
+        this.showAddWebsiteDialog = true;
+      } else {
+        this.showPasswordDialog = true;
+      }
+    },
     search() {
       if (this.searchQuery.trim()) {
         if (this.selectedEngine === 'local') {

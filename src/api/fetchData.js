@@ -135,7 +135,118 @@ export async function addWebsite(websiteData) {
       stack: error.stack,
       timestamp: new Date().toISOString()
     });
-    // 抛出错误，让调用方处理
+    throw error;
+  }
+}
+
+export async function deleteWebsite(recordId) {
+  try {
+    const apiKey = import.meta.env.VITE_VIKA_API_KEY || localStorage.getItem('apiKey');
+    const datasheetId = import.meta.env.VITE_VIKA_DATASHEET_ID || localStorage.getItem('datasheetId');
+    
+    if (!apiKey || !datasheetId) {
+      throw new Error('API配置不完整，请前往设置页面配置');
+    }
+    
+    const apiUrl = `${baseUrl}/${datasheetId}/records?recordIds=${recordId}`;
+    
+    const response = await fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('删除请求失败:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      });
+      throw new Error(errorData.message || '删除请求失败');
+    }
+    
+    const responseData = await response.json();
+    console.log('删除成功:', responseData);
+    return responseData;
+  } catch (error) {
+    console.error('删除网站失败:', {
+      message: error.message,
+      stack: error.stack,
+      timestamp: new Date().toISOString()
+    });
+    throw error;
+  }
+}
+
+export async function updateWebsite(recordId, websiteData) {
+  try {
+    const apiKey = import.meta.env.VITE_VIKA_API_KEY || localStorage.getItem('apiKey');
+    const datasheetId = import.meta.env.VITE_VIKA_DATASHEET_ID || localStorage.getItem('datasheetId');
+    
+    if (!apiKey || !datasheetId) {
+      throw new Error('API配置不完整，请前往设置页面配置');
+    }
+    
+    const apiUrl = `${baseUrl}/${datasheetId}/records?fieldKey=name`;
+    
+    const fields = {
+      category: websiteData.category,
+      name: websiteData.name,
+      url: websiteData.url,
+      description: websiteData.description || '',
+      order: (websiteData.order || 0).toString()
+    };
+    
+    if (websiteData.icon !== undefined) {
+      fields.icon = websiteData.icon;
+    }
+    
+    const requestBody = {
+      records: [
+        {
+          recordId: recordId,
+          fields: fields
+        }
+      ],
+      fieldKey: "name"
+    };
+    
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('更新请求失败:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      });
+      throw new Error('更新请求失败');
+    }
+    
+    const responseData = await response.json();
+    console.log('更新成功:', responseData);
+    
+    if (!responseData || !responseData.data || !responseData.data.records || !Array.isArray(responseData.data.records)) {
+      throw new Error(`返回数据格式不正确: ${JSON.stringify(responseData)}`);
+    }
+    
+    return responseData.data.records[0];
+  } catch (error) {
+    console.error('更新网站失败:', {
+      message: error.message,
+      stack: error.stack,
+      timestamp: new Date().toISOString()
+    });
     throw error;
   }
 }

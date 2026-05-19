@@ -76,6 +76,7 @@
 
 <script>
 export default {
+  emits: ['password-validated', 'close'],
   props: {
     visible: {
       type: Boolean,
@@ -168,8 +169,8 @@ export default {
         const correctPassword = import.meta.env.VITE_SUBMIT_PASSWORD || '123654';
         
         if (this.password === correctPassword) {
-          // 密码正确，重置错误次数
           this.resetLock();
+          localStorage.setItem('passwordValidatedAt', Date.now().toString());
           this.$emit('password-validated');
           this.$emit('close');
         } else {
