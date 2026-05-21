@@ -137,6 +137,7 @@
   object-fit: cover;
   border: 1px solid #dadada;
   border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 :global(.dark) .preview-image {
@@ -149,7 +150,7 @@
 </style>
 
 <script>
-import { getPreviewUrl, markPreviewCached } from '../utils/previewCache';
+import { getPreviewUrl, isPreviewCached, markPreviewCached } from '../utils/previewCache';
 
 let globalLoadQueue = [];
 let isProcessingQueue = false;
@@ -203,10 +204,15 @@ export default {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             this.observer.disconnect();
-            enqueueLoad(() => {
+            if (isPreviewCached(this.item.url)) {
               this.previewSrc = getPreviewUrl(this.item.url);
               this.previewState = 'loading';
-            });
+            } else {
+              enqueueLoad(() => {
+                this.previewSrc = getPreviewUrl(this.item.url);
+                this.previewState = 'loading';
+              });
+            }
           }
         });
       }, {

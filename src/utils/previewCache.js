@@ -13,15 +13,14 @@ function saveCacheTimestamps(timestamps) {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(timestamps));
   } catch {
-    // localStorage full, clear old entries
-    const keys = Object.keys(timestamps);
-    const half = keys.slice(0, Math.floor(keys.length / 2));
-    half.forEach(k => delete timestamps[k]);
+    const entries = Object.entries(timestamps).sort((a, b) => a[1] - b[1]);
+    const half = Math.floor(entries.length / 2);
+    for (let i = 0; i < half; i++) {
+      delete timestamps[entries[i][0]];
+    }
     try {
       localStorage.setItem(CACHE_KEY, JSON.stringify(timestamps));
-    } catch {
-      // give up
-    }
+    } catch {}
   }
 }
 
@@ -45,11 +44,4 @@ export function markPreviewCached(url) {
 
 export function getPreviewUrl(url) {
   return `https://image.thum.io/get/width/300/crop/400/noanimate/${url}`;
-}
-
-export function getPreviewSrc(url) {
-  if (isPreviewCached(url)) {
-    return getPreviewUrl(url);
-  }
-  return getPreviewUrl(url);
 }
