@@ -2,7 +2,6 @@
   <a :href="item.url" target="_blank" 
      class="card-container flex flex-col bg-white dark:bg-gray-700 rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] border-2 border-transparent relative overflow-hidden">
     
-    <!-- 信息区域 -->
     <div class="flex items-center p-3 sm:items-start sm:p-4">
       <img :src="item.icon" alt="icon" class="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3 sm:mt-0.5 flex-shrink-0" />
       <div class="flex-1 min-w-0">
@@ -16,8 +15,7 @@
       </div>
     </div>
     
-    <!-- 预览图片区域 - 仅桌面端显示 -->
-    <div v-if="previewState !== 'error'" ref="previewArea" class="preview-area relative w-full flex-1 min-h-0 hidden sm:block overflow-hidden">
+    <div v-if="showPreview && previewState !== 'error'" ref="previewArea" class="preview-area relative w-full flex-1 min-h-0 hidden sm:block overflow-hidden">
       <img
         v-if="previewSrc"
         :src="previewSrc"
@@ -32,19 +30,18 @@
       </div>
     </div>
     
-    <!-- 操作按钮组 -->
     <div class="card-actions absolute top-1 right-1 flex items-center gap-1 z-10">
       <button 
         @click.prevent.stop="handleEdit"
         class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-blue-500 transition-all duration-300"
-        style="font-size: 14px; padding: 2px; background: none; border: none;"
+        style="font-size: 14px; padding: 2px;"
       >
         <i class="fas fa-pen"></i>
       </button>
       <button 
         @click.prevent.stop="handleDelete"
         class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-red-500 transition-all duration-300"
-        style="font-size: 14px; padding: 2px; background: none; border: none;"
+        style="font-size: 14px; padding: 2px;"
       >
         <i class="fas fa-trash-alt"></i>
       </button>
@@ -55,7 +52,7 @@
           'text-yellow-500 opacity-50': isFavorite,
           'text-gray-400 opacity-0 hover:opacity-100': !isFavorite
         }"
-        style="font-size: 16px; padding: 2px; background: none; border: none;"
+        style="font-size: 16px; padding: 2px;"
       >
         <i class="fas fa-star"></i>
       </button>
@@ -69,7 +66,6 @@
   overflow: hidden;
   line-height: 1.4;
   word-break: break-all;
-  box-sizing: border-box;
 }
 
 @media (min-width: 640px) {
@@ -107,16 +103,6 @@
   border: none;
   z-index: 10;
   position: relative;
-}
-
-.card-actions {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.card-container:hover .action-btn.opacity-0 {
-  opacity: 1 !important;
 }
 
 .card-container:hover .card-actions .action-btn:not(.text-yellow-500) {
@@ -173,7 +159,7 @@ function enqueueLoad(callback) {
 
 export default {
   emits: ['favorite-changed', 'edit', 'delete'],
-  props: ['item'],
+  props: ['item', 'showPreview'],
   data() {
     return {
       favoriteItems: JSON.parse(localStorage.getItem('favoriteItems')) || [],
@@ -193,6 +179,24 @@ export default {
   beforeUnmount() {
     if (this.observer) {
       this.observer.disconnect();
+    }
+  },
+  watch: {
+    showPreview(val) {
+      if (val) {
+        this.previewState = 'idle';
+        this.previewSrc = null;
+        this.$nextTick(() => {
+          this.setupLazyLoad();
+        });
+      } else {
+        if (this.observer) {
+          this.observer.disconnect();
+          this.observer = null;
+        }
+        this.previewState = 'idle';
+        this.previewSrc = null;
+      }
     }
   },
   methods: {

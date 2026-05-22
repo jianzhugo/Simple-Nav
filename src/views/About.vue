@@ -59,7 +59,6 @@
               </ul>
             </div>
             
-            <!-- 新增关于作者区块 -->
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
               <i class="fas fa-user-circle text-red-500 text-xl mb-2"></i>
               <h3 class="text-xl font-semibold mb-2">关于作者</h3>
@@ -103,7 +102,6 @@
               </div>
             </div>
             
-            <!-- 数据统计区块 -->
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
               <i class="fas fa-chart-line text-green-500 text-xl mb-2"></i>
               <h3 class="text-xl font-semibold mb-2">数据统计</h3>
@@ -138,7 +136,6 @@ export default {
   components: { Footer },
   data() {
     return {
-      darkMode: localStorage.getItem('darkMode') === 'true',
       websiteCount: 0,
       lastUpdateTime: ''
     }
@@ -148,21 +145,16 @@ export default {
       const data = await fetchData();
       this.websiteCount = data.length;
       
-      // 找出最新的更新时间
       if (data.length > 0) {
-        // 筛选出有更新时间的记录
         const recordsWithUpdateTime = data.filter(item => item.updatedAt);
         if (recordsWithUpdateTime.length > 0) {
-          // 找出最新的时间
           const latestRecord = recordsWithUpdateTime.reduce((latest, current) => {
             return new Date(current.updatedAt) > new Date(latest.updatedAt) ? current : latest;
           });
-          // 格式化时间为 YYYY-MM-DD
           this.lastUpdateTime = new Date(latestRecord.updatedAt).toISOString().split('T')[0];
         }
       }
     } catch (error) {
-      console.error('获取数据失败:', error);
       this.websiteCount = 0;
     }
   }

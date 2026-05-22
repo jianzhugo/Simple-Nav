@@ -1,97 +1,52 @@
-/* 全局黑暗模式样式 */
 .dark {
   color-scheme: dark;
 }
 
-/* 确保黑暗模式下的背景色和文字色 */
 .dark body {
-  background-color: #111827 !important; /* gray-900 */
-  color: #e5e7eb !important; /* gray-200 */
+  background-color: #111827 !important;
+  color: #e5e7eb !important;
 }
 
-/* 关键：确保Tailwind的黑暗模式选择器能够正确匹配 */
-:root.dark {
-  color-scheme: dark;
-}
-
-/* 覆盖Tailwind的黑暗模式样式 */
 .dark .bg-white {
-  background-color: #374151 !important; /* gray-700 */
+  background-color: #374151 !important;
 }
 
 .dark .bg-gray-100 {
-  background-color: #4b5563 !important; /* gray-600 */
+  background-color: #4b5563 !important;
 }
 
 .dark .bg-gray-50 {
-  background-color: #374151 !important; /* gray-700 */
+  background-color: #374151 !important;
 }
 
 .dark .bg-blue-50 {
-  background-color: #1e3a8a !important; /* blue-900 */
+  background-color: #1e3a8a !important;
 }
 
 .dark .text-gray-600 {
-  color: #d1d5db !important; /* gray-300 */
+  color: #d1d5db !important;
 }
 
 .dark .text-gray-800 {
-  color: #f3f4f6 !important; /* gray-100 */
+  color: #f3f4f6 !important;
 }
 
 .dark .text-gray-900 {
-  color: #f9fafb !important; /* gray-50 */
+  color: #f9fafb !important;
 }
 
 .dark .hover\:bg-gray-100:hover {
-  background-color: #4b5563 !important; /* gray-600 */
+  background-color: #4b5563 !important;
 }
 
 .dark .hover\:bg-gray-50:hover {
-  background-color: #374151 !important; /* gray-700 */
+  background-color: #374151 !important;
 }
 
 .dark .border-gray-200 {
-  border-color: #4b5563 !important; /* gray-600 */
+  border-color: #4b5563 !important;
 }
 
 .dark .shadow-md {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* 确保所有重要的黑暗模式样式都被覆盖 */
-.dark .dark\:bg-gray-700 {
-  background-color: #374151 !important;
-}
-
-.dark .dark\:bg-gray-800 {
-  background-color: #1f2937 !important;
-}
-
-.dark .dark\:bg-gray-900 {
-  background-color: #111827 !important;
-}
-
-.dark .dark\:text-gray-100 {
-  color: #f3f4f6 !important;
-}
-
-.dark .dark\:text-gray-200 {
-  color: #e5e7eb !important;
-}
-
-.dark .dark\:text-gray-300 {
-  color: #d1d5db !important;
-}
-
-.dark .dark\:text-gray-400 {
-  color: #9ca3af !important;
-}
-
-.dark .dark\:hover\:bg-gray-600:hover {
-  background-color: #4b5563 !important;
-}
-
-.dark .dark\:hover\:bg-gray-700:hover {
-  background-color: #374151 !important;
 }

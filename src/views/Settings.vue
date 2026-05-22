@@ -2,11 +2,8 @@
   <div class="h-screen flex flex-col">
     <div class="flex flex-1 overflow-hidden relative">
       <main class="flex-1 flex flex-col p-4 overflow-y-auto">
-        <!-- 移除Navbar组件 -->
-        
         <div class="flex-grow">
           <div class="max-w-4xl mx-auto space-y-8">
-            <!-- 修改标题样式为居中 -->
             <h2 
               class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-8 text-center hover:text-purple-800 dark:hover:text-purple-300 transition-colors cursor-pointer"
               @click="$router.push('/')"
@@ -14,14 +11,12 @@
               系统设置
             </h2>
             
-            <!-- 背景颜色设置 -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 class="text-xl font-semibold mb-4 flex items-center">
                 <i class="fas fa-palette text-blue-500 mr-2"></i>
                 界面外观
               </h3>
               
-              <!-- 默认颜色 -->
               <div class="mb-8">
                 <h4 class="text-lg font-medium mb-4">默认配色方案</h4>
                 <div class="grid grid-cols-3 gap-4">
@@ -36,7 +31,6 @@
                 </div>
               </div>
               
-              <!-- 自定义颜色 -->
               <div class="mb-8">
                 <h4 class="text-lg font-medium mb-4">自定义颜色</h4>
                 <div class="flex items-center gap-4">
@@ -61,7 +55,6 @@
                 </div>
               </div>
               
-              <!-- 自定义背景图 -->
               <div>
                 <h4 class="text-lg font-medium mb-4">自定义背景图</h4>
                 <div class="flex items-center gap-4">
@@ -85,7 +78,6 @@
               </div>
             </div>
             
-            <!-- API配置 -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 class="text-xl font-semibold mb-4 flex items-center">
                 <i class="fas fa-key text-purple-500 mr-2"></i>
@@ -140,7 +132,6 @@
               </div>
             </div>
             
-            <!-- 布局设置 -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 class="text-xl font-semibold mb-4 flex items-center">
                 <i class="fas fa-th-large text-green-500 mr-2"></i>
@@ -158,14 +149,12 @@
               </div>
             </div>
             
-            <!-- 配置导入导出 -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 class="text-xl font-semibold mb-4 flex items-center">
                 <i class="fas fa-exchange-alt text-green-500 mr-2"></i>
                 配置导入导出
               </h3>
               <div class="space-y-4">
-                <!-- 配置项选择 -->
                 <div>
                   <h4 class="text-lg font-medium mb-2">选择要导入/导出的配置项：</h4>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -192,7 +181,6 @@
                   </div>
                 </div>
                 
-                <!-- 导出配置 -->
                 <div class="flex gap-4">
                   <button
                     @click="exportConfig"
@@ -201,7 +189,6 @@
                     <i class="fas fa-download mr-2"></i>导出配置
                   </button>
                   
-                  <!-- 导入配置 -->
                   <div class="relative">
                     <input
                       type="file"
@@ -218,7 +205,6 @@
                   </div>
                 </div>
                 
-                <!-- 导入结果提示 -->
                 <div v-if="importMessage" class="p-3 rounded-lg" :class="importMessageType === 'success' ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'">
                   <i :class="importMessageType === 'success' ? 'fas fa-check-circle mr-2' : 'fas fa-exclamation-circle mr-2'"></i>
                   {{ importMessage }}
@@ -226,9 +212,7 @@
               </div>
             </div>
             
-            <!-- 分类图标设置 -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow mt-6">
-              <!-- 折叠面板头部 -->
               <div 
                 class="p-6 cursor-pointer flex justify-between items-center" 
                 @click="isIconSettingsExpanded = !isIconSettingsExpanded"
@@ -240,7 +224,6 @@
                 <i :class="`fas fa-chevron-down transition-transform duration-300 ${isIconSettingsExpanded ? 'transform rotate-180' : ''}`"></i>
               </div>
               
-              <!-- 折叠面板内容 -->
               <div 
                 v-if="isIconSettingsExpanded" 
                 class="p-6 pt-0 space-y-4 border-t border-gray-200 dark:border-gray-700"
@@ -276,7 +259,6 @@
                         <i :class="categoryIcons[category] || 'fas fa-question-circle'"></i>
                       </div>
                       <div class="flex-1 flex items-center">
-                        <!-- 使用input支持手动输入 -->
                         <input
                           v-model="categoryIcons[category]"
                           type="text"
@@ -284,7 +266,6 @@
                           class="flex-1 bg-gray-100 dark:bg-gray-700 rounded px-3 py-1"
                           style="height: 36px;"
                         >
-                        <!-- 图标选择下拉菜单 -->
                         <div class="relative ml-2">
                           <button 
                             class="p-1 bg-gray-100 dark:bg-gray-700 rounded flex items-center justify-center"
@@ -293,7 +274,6 @@
                           >
                             <i class="fas fa-chevron-down"></i>
                           </button>
-                          <!-- 图标选择面板 -->
                           <div 
                             v-if="showIconDropdown[category]" 
                             class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
@@ -333,7 +313,6 @@
           </div>
         </div>
         
-        <!-- 统一添加Footer -->
         <Footer class="mt-8" />
       </main>
     </div>
@@ -341,29 +320,24 @@
 </template>
 
 <script>
-// 移除Navbar导入
 import Footer from '../components/Footer.vue'
-import { fetchData } from '../api/fetchData'
 
 export default {
-  components: { Footer }, // 移除Navbar组件
+  components: { Footer },
   data() {
     return {
       customColorHex: localStorage.getItem('customColor') || '',
       backgroundImage: localStorage.getItem('backgroundImage') || '',
-      darkMode: localStorage.getItem('darkMode') === 'true',
       backgroundColors: ['#ffffff', '#f3f4f6', '#fef3c7', '#f0fdf4', '#f1f5f9', '#bfc9df'],
       selectedBg: localStorage.getItem('background') || '#ffffff',
-      columns: localStorage.getItem('columns') || 5,
-      // API配置相关变量
+      columns: parseInt(localStorage.getItem('columns')) || 5,
       apiKey: localStorage.getItem('apiKey') || '',
       datasheetId: localStorage.getItem('datasheetId') || '',
       viewId: localStorage.getItem('viewId') || '',
-      // 分类图标相关变量
-      categories: [], // 初始为空，不要默认分类
+      categories: [],
       loadingCategories: false,
-      categoryIcons: {}, // 初始为空，通过loadCategoryIcons加载
-      loadError: null, // 加载错误提示
+      categoryIcons: {},
+      loadError: null,
       availableIcons: [
         { name: 'fa-wrench', displayName: '工具' },
         { name: 'fa-blog', displayName: '博客' },
@@ -386,61 +360,47 @@ export default {
         { name: 'fa-question-circle', displayName: '问号' }
       ],
       isIconSettingsExpanded: false,
-      // 为每个分类创建独立的下拉状态
       showIconDropdown: {},
-      // 导入导出配置相关变量
       exportOptions: {
         darkMode: true,
         columns: true,
         background: true,
         categoryIcons: true,
-        apiConfig: false // 默认不导出API配置，保护敏感信息
+        apiConfig: false
       },
       importMessage: '',
       importMessageType: ''
     }
   },
-  // 移除与侧边栏相关的所有方法和props
-  methods: {
-    mounted() {  // 确保这是直接的方法，不是嵌套在methods中的
-      // 初始化背景设置
-      const savedBg = localStorage.getItem('background')
-      const savedImage = localStorage.getItem('backgroundImage')
-      
-      if (savedBg) {
-        this.changeBackground(savedBg)
-      } else if (savedImage) {
-        this.applyBackgroundImage()
-      }
-      
-      // 加载分类数据和图标配置
-      this.loadCategories()
-    },
+  mounted() {
+    const savedBg = localStorage.getItem('background')
+    const savedImage = localStorage.getItem('backgroundImage')
     
-    // 加载分类数据
+    if (savedBg) {
+      this.changeBackground(savedBg)
+    } else if (savedImage) {
+      this.applyBackgroundImage()
+    }
+    
+    this.loadCategories()
+  },
+  methods: {
     loadCategories() {
       this.loadingCategories = true;
       this.loadError = null;
       try {
-        // 直接从localStorage获取分类信息（由App.vue存储）
-        console.log('从localStorage获取分类信息...');
         const savedCategories = localStorage.getItem('appCategories');
         if (savedCategories) {
           const categories = JSON.parse(savedCategories);
           if (categories.length > 0) {
-            console.log('获取分类成功:', categories);
             this.categories = categories;
             this.loadCategoryIcons();
             return;
           }
         }
-        
-        // 获取失败，显示为空并提示
-        console.log('获取分类失败，显示为空');
         this.categories = [];
         this.loadError = '无法获取分类信息，请先访问首页或刷新页面';
       } catch (error) {
-        console.error('加载分类失败:', error);
         this.categories = [];
         this.loadError = '无法获取分类信息，请先访问首页或刷新页面';
       } finally {
@@ -448,37 +408,23 @@ export default {
       }
     },
     
-    // 加载分类图标配置
     loadCategoryIcons() {
-      // 先从localStorage获取已保存的图标配置
       const savedIcons = localStorage.getItem('categoryIcons')
       const savedIconsObj = savedIcons ? JSON.parse(savedIcons) : {};
       
-      // 为当前所有分类分配图标
       const newCategoryIcons = {};
-      
-      // 遍历当前分类列表（可能是从API获取的）
       this.categories.forEach(category => {
-        // 如果有已保存的图标配置，使用它；否则使用默认图标
-        if (savedIconsObj[category]) {
-          newCategoryIcons[category] = savedIconsObj[category];
-        } else {
-          // 为新分类分配默认图标
-          newCategoryIcons[category] = 'fas fa-question-circle';
-        }
+        newCategoryIcons[category] = savedIconsObj[category] || 'fas fa-question-circle';
       });
       
-      // 更新图标配置
       this.categoryIcons = newCategoryIcons;
     },
     
-    // 保存分类图标配置
     saveCategoryIcons() {
       localStorage.setItem('categoryIcons', JSON.stringify(this.categoryIcons))
       alert('分类图标配置已保存')
     },
     
-    // 重置分类图标为默认值
     resetCategoryIcons() {
       this.categoryIcons = {
         '在线工具': 'fas fa-wrench',
@@ -500,7 +446,6 @@ export default {
       alert('分类图标已重置为默认值')
     },
     
-    // 导出配置
     exportConfig() {
       try {
         const config = {
@@ -509,7 +454,6 @@ export default {
           settings: {}
         };
         
-        // 根据选择的选项导出配置
         if (this.exportOptions.darkMode) {
           config.settings.darkMode = localStorage.getItem('darkMode') === 'true';
         }
@@ -534,7 +478,6 @@ export default {
           config.settings.viewId = localStorage.getItem('viewId');
         }
         
-        // 生成JSON文件并下载
         const dataStr = JSON.stringify(config, null, 2);
         const dataBlob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(dataBlob);
@@ -546,7 +489,6 @@ export default {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
       } catch (error) {
-        console.error('导出配置失败:', error);
         this.importMessage = '导出配置失败，请重试';
         this.importMessageType = 'error';
         setTimeout(() => {
@@ -555,7 +497,6 @@ export default {
       }
     },
     
-    // 导入配置
     importConfig(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -570,7 +511,6 @@ export default {
           
           const { settings } = config;
           
-          // 根据配置项导入
           if (settings.darkMode !== undefined) {
             localStorage.setItem('darkMode', settings.darkMode);
           }
@@ -615,16 +555,13 @@ export default {
             this.viewId = settings.viewId;
           }
           
-          // 显示导入成功消息
           this.importMessage = '配置导入成功！页面将刷新以应用新配置';
           this.importMessageType = 'success';
           
-          // 3秒后刷新页面
           setTimeout(() => {
             window.location.reload();
           }, 3000);
         } catch (error) {
-          console.error('导入配置失败:', error);
           this.importMessage = '导入配置失败，请检查文件格式';
           this.importMessageType = 'error';
           setTimeout(() => {
@@ -633,8 +570,6 @@ export default {
         }
       };
       reader.readAsText(file);
-      
-      // 重置文件输入，允许重复选择同一文件
       event.target.value = '';
     },
     applyCustomColor() {
@@ -646,7 +581,7 @@ export default {
       }
       
       if (colorRegex.test(color)) {
-        this.customColorHex = color  // 标准化格式
+        this.customColorHex = color
         this.changeBackground(color)
         localStorage.setItem('customColor', color)
       } else {
@@ -661,9 +596,8 @@ export default {
         document.body.style.backgroundSize = 'cover'
         document.body.style.backgroundPosition = 'center'
         document.body.style.backgroundRepeat = 'no-repeat'
-        document.body.style.backgroundColor = '' // 清除背景色
+        document.body.style.backgroundColor = ''
         
-        // 持久化存储
         localStorage.setItem('backgroundImage', this.backgroundImage)
         localStorage.removeItem('background')
         localStorage.removeItem('customColor')
@@ -674,11 +608,10 @@ export default {
     
     changeBackground(color) {
       this.selectedBg = color
-      this.customColorHex = color // 同步到颜色选择器
+      this.customColorHex = color
       document.body.style.backgroundColor = color
       document.body.style.backgroundImage = 'none'
       
-      // 持久化存储
       localStorage.setItem('background', color)
       localStorage.setItem('customColor', color)
       localStorage.removeItem('backgroundImage')
@@ -686,7 +619,6 @@ export default {
     saveSettings() {
       localStorage.setItem('columns', this.columns)
     },
-    // 保存API配置
     saveApiConfig() {
       if (!this.apiKey.trim() || !this.datasheetId.trim() || !this.viewId.trim()) {
         alert('请填写完整的API配置信息');
@@ -700,7 +632,6 @@ export default {
       alert('API配置已保存，页面将刷新以应用新配置');
       window.location.reload();
     },
-    // 重置API配置
     resetApiConfig() {
       this.apiKey = '';
       this.datasheetId = '';

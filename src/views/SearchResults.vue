@@ -1,5 +1,4 @@
 <template>
-  <!-- 移除顶层dark类绑定 -->
   <div class="h-screen flex flex-col">
     <div class="flex flex-1 overflow-hidden relative">
       <Sidebar 
@@ -14,14 +13,12 @@
         <div class="flex-grow">
           <h2 class="text-2xl mb-4 dark:text-gray-200">搜索：{{ searchQuery }}</h2>
           
-          <!-- 加载状态 -->
           <div v-if="loading" class="flex items-center justify-center h-64">
             <div class="text-gray-500 dark:text-gray-400">
               <i class="fas fa-spinner fa-spin mr-2"></i>正在加载数据...
             </div>
           </div>
           
-          <!-- 错误提示 -->
           <div v-else-if="error" class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center max-w-2xl mx-auto">
             <i class="fas fa-exclamation-circle text-red-500 text-4xl mb-4"></i>
             <h3 class="text-xl font-semibold text-red-700 dark:text-red-300 mb-2">{{ error }}</h3>
@@ -33,7 +30,6 @@
             </button>
           </div>
           
-          <!-- 搜索结果 -->
           <div v-else>
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               <Card 
@@ -70,7 +66,6 @@ export default {
       allItems: [],
       darkMode: localStorage.getItem('darkMode') === 'true',
       isSidebarCollapsed: window.innerWidth < 768,
-      // 新增 categories 属性
       categories: [],
       error: null
     }
@@ -100,25 +95,26 @@ export default {
       
       try {
         this.allItems = await fetchData();
-        // 初始化 categories
         this.categories = [...new Set(this.allItems.map(item => item.category))];
-        console.log('搜索数据:', {
-          query: this.searchQuery,
-          items: this.allItems,
-          results: this.searchResults
-        });
       } catch (error) {
-        console.error('搜索失败:', error);
         this.error = error.message;
       } finally {
         this.loading = false;
       }
     },
-    // 添加 toggleSidebar 方法
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
+      if (this.darkMode) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem('darkMode', this.darkMode);
+    },
     toggleSidebar() {
       this.isSidebarCollapsed = !this.isSidebarCollapsed;
-    }
-    ,selectCategory(category) {
+    },
+    selectCategory(category) {
       this.$router.push({ path: '/', query: { category } });
     }
   },

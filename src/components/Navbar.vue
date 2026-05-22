@@ -1,14 +1,11 @@
 <template>
   <nav class="h-12 sticky top-0 z-30 bg-white rounded-xl dark:bg-gray-800 shadow-md px-4 py-2 flex justify-between items-center">
-    <!-- 修改为 router-link 以实现跳转 -->
     <router-link to="/" class="text-xl font-bold text-blue-500">
       <i class="fas fa-heart"></i> 少即是多
     </router-link>
     
-    <!-- 修改搜索区域显示逻辑 -->
     <div class="hidden md:flex items-center gap-2 flex-1 max-w-2xl mx-4">
       <div class="relative">
-        <!-- 调整当前选择项的宽度和图标间距 -->
         <a href="javascript:;" 
           class="bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-1 flex items-center min-w-[120px]"
           @click="showEngines = !showEngines">
@@ -16,7 +13,6 @@
           <span class="truncate">{{ engines[selectedEngine].name }}</span>
         </a>
         
-        <!-- 调整下拉菜单宽度和选项对齐 -->
         <div v-show="showEngines" 
           class="absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg min-w-[160px] z-50">
           <a 
@@ -31,7 +27,6 @@
         </div>
       </div>
 
-      <!-- 保持原有的 input 和 button 不变 -->
       <input
         type="text"
         v-model="searchQuery"
@@ -43,13 +38,22 @@
         @click="search"
         class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-lg"
       >
-        <i class="fas fa-search"></i>  <!-- 使用Font Awesome的搜索图标 -->
+        <i class="fas fa-search"></i>
       </button>
     </div>
     
-    <!-- 右侧按钮区域 -->
     <div class="flex items-center gap-0">
-      <!-- 新增提交按钮 -->
+      <div class="relative group w-8 h-8 items-center justify-center hidden sm:flex">
+        <button
+          @click="$emit('toggle-preview')"
+          class="w-full h-full flex items-center justify-center rounded-full transition-colors duration-300"
+          :class="showPreview ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400'"
+        >
+          <i class="fas fa-image transition-transform duration-300 hover:scale-110"></i>
+        </button>
+        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">{{ showPreview ? '关闭预览' : '开启预览' }}</span>
+      </div>
+      
       <div class="relative group w-8 h-8 flex items-center justify-center">
         <button
           @click="handleAddClick"
@@ -60,7 +64,6 @@
         <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">添加网站</span>
       </div>
       
-      <!-- 新增设置按钮 -->
       <div class="relative group w-8 h-8 flex items-center justify-center">
         <router-link 
           to="/settings"
@@ -71,7 +74,6 @@
         <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">设置</span>
       </div>
       
-      <!-- 新增GitHub图标 -->
       <div class="relative group w-8 h-8 flex items-center justify-center">
         <a 
           href="https://github.com/jianzhugo/Simple-Nav" 
@@ -83,7 +85,6 @@
         <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">GitHub</span>
       </div>
       
-      <!-- 原有的暗黑模式切换按钮 -->
       <div class="relative group w-8 h-8 flex items-center justify-center">
         <button 
           @click="$emit('toggleDarkMode')" 
@@ -95,7 +96,6 @@
       </div>
     </div>
     
-    <!-- 密码验证对话框 -->
     <Teleport to="body">
       <PasswordDialog
         :visible="showPasswordDialog"
@@ -105,7 +105,6 @@
       />
     </Teleport>
     
-    <!-- 网址添加对话框 -->
     <Teleport to="body">
       <AddWebsiteDialog
         :visible="showAddWebsiteDialog"
@@ -120,13 +119,15 @@
 <script>
 import PasswordDialog from './PasswordDialog.vue';
 import AddWebsiteDialog from './AddWebsiteDialog.vue';
+import { isPasswordValidated } from '../utils/auth';
 
 export default {
   components: {
     PasswordDialog,
     AddWebsiteDialog
   },
-  props: ['darkMode', 'categories'],
+  emits: ['toggleDarkMode', 'submit-website', 'toggle-preview'],
+  props: ['darkMode', 'categories', 'showPreview'],
   data() {
     return {
       showEngines: false,
@@ -165,12 +166,8 @@ export default {
     };
   },
   methods: {
-    isPasswordValidated() {
-      const validatedAt = parseInt(localStorage.getItem('passwordValidatedAt')) || 0;
-      return (Date.now() - validatedAt) < 60 * 60 * 1000;
-    },
     handleAddClick() {
-      if (this.isPasswordValidated()) {
+      if (isPasswordValidated()) {
         this.showAddWebsiteDialog = true;
       } else {
         this.showPasswordDialog = true;
@@ -179,7 +176,6 @@ export default {
     search() {
       if (this.searchQuery.trim()) {
         if (this.selectedEngine === 'local') {
-          // 使用 router 进行跳转
           this.$router.push({ 
             path: '/search',
             query: { q: this.searchQuery.trim() }
@@ -190,15 +186,8 @@ export default {
         }
       }
     },
-    
-    // 处理网址提交
-    async handleSubmitWebsite(websiteData) {
-      try {
-        // 调用父组件传递的提交方法
-        await this.$emit('submit-website', websiteData);
-      } catch (error) {
-        console.error('提交网站失败:', error);
-      }
+    handleSubmitWebsite(websiteData) {
+      this.$emit('submit-website', websiteData);
     }
   }
 };
