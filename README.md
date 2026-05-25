@@ -1,7 +1,7 @@
 <div align="center">
 <a href="https://nav.shuichanga.cn"><img height="100px" alt="logo" src="https://nav.shuichanga.cn/img/logo.png"></a>
   <p style="color:blue;font-size:20px;">Simple NAV</p>
-  <p><em>自用简约的网址导航站，完全用AI采用vue框架开发。导航数据通过维基云表格编辑，无需数据库，无需后端，简单且方便。</em></p>
+  <p><em>自用简约的网址导航站，完全用AI采用Vue框架开发。导航数据通过维基云表格编辑，无需数据库，无需后端，简单且方便。</em></p>
   <div>
     <img src="https://img.shields.io/github/stars/jianzhugo/Simple-Nav?style=flat-square&color=yellow" alt="GitHub Stars">
     <img src="https://img.shields.io/github/forks/jianzhugo/Simple-Nav?style=flat-square&color=green" alt="GitHub Forks">    
@@ -14,22 +14,28 @@
 
 ## 功能特点
 
-- [x] 智能本地搜索功能
-- [x] 响应式侧边栏布局
-- [x] 黑暗模式自动适配
-- [x] 多分类资源管理
+- [x] 智能本地搜索功能（百度/Bing/谷歌/站内）
+- [x] 响应式侧边栏布局，支持折叠/展开
+- [x] 双主题系统（默认主题 + 液态玻璃主题），均支持深色模式
+- [x] 每个主题独立配置背景（纯色/渐变预设/自定义渐变/背景图片）
+- [x] 右下角悬浮工具条（主页/图片预览/主题切换）
+- [x] 网站卡片预览图（懒加载 + 请求队列 + 7天缓存）
+- [x] 多分类资源管理，自定义分类图标
 - [x] 从维基云表格获取数据，无需数据库
-- [x] 自定义背景颜色/图片/卡片数
-- [x] 自定义分类图标
-- [x] 新增配置导入导出功能，支持选择导入导出项
-- [x] 新增直接增加网址功能，无需编辑表格
 - [x] 网站收藏功能，支持快速访问常用网站
+- [x] 直接增加/编辑/删除网址，密码保护
+- [x] 配置导入导出功能，支持选择导入导出项
+- [x] 自定义背景颜色/渐变/图片/卡片列数
 
 ## 演示站
 
 <https://nav.shuichanga.cn>
 
-![演示站](https://nav.shuichanga.cn/img/demo1.png)
+开户预览图
+![开启](https://nav.shuichanga.cn/img/kaiqi.webp)
+
+关闭预览图
+![关闭](https://nav.shuichanga.cn/img/guanbi.webp)
 
 ## 维基云表格
 
@@ -51,13 +57,13 @@
 
 [Pages地址](https://console.cloud.tencent.com/edgeone/pages)
 
-3、点击创建项目，选择“导入Git仓库”,选择刚才Fork的仓库
+3、点击创建项目，选择"导入Git仓库",选择刚才Fork的仓库
 
 4、在构建部署配置中按下图填写，然后点完成就可以了。
 
 ![配置](https://nav.shuichanga.cn/img/demo3.png)
 
-5、在项目设置中，将“环境变量”中的“VITE\_API\_PASSWORD”设置为你自己的密码。（用于直接增加网址功能）
+5、在项目设置中，将"环境变量"中的"VITE\_API\_PASSWORD"设置为你自己的密码。（用于直接增加网址功能）
 ![获取](https://nav.shuichanga.cn/img/mima.png)
 
 #### 二、改数据
@@ -115,8 +121,17 @@ VITE_VIKA_VIEW_ID=your_view_id_here
 
 ## 直接增加网址
 
-点击右上角的“+”号，输入网址和分类，即可直接增加网址。（需验证密码）
+点击右上角的"+"号，输入网址和分类，即可直接增加网址。（需验证密码）
 ![api](https://nav.shuichanga.cn/img/zengjiawangzhi.png)
+
+## 技术栈
+
+- **Vue 3** — Options API
+- **Vue Router** — History 模式
+- **Tailwind CSS** — 原子化样式
+- **Font Awesome** — 图标库
+- **Vite** — 构建工具
+- **维基云 (Vika)** — 数据源 API
 
 ## 其它
 

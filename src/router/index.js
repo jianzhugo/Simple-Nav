@@ -1,18 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import App from '../App.vue'
 import SearchResults from '../views/SearchResults.vue'
 import About from '../views/About.vue'
 
 const routes = [
   {
-    path: '/',
-    component: App,
-    children: [
-      {
-        path: '/settings',
-        component: () => import('../views/Settings.vue')
-      }
-    ]
+    path: '/settings',
+    component: () => import('../views/Settings.vue')
   },
   {
     path: '/search',

@@ -43,17 +43,6 @@
     </div>
     
     <div class="flex items-center gap-0">
-      <div class="relative group w-8 h-8 items-center justify-center hidden sm:flex">
-        <button
-          @click="$emit('toggle-preview')"
-          class="w-full h-full flex items-center justify-center rounded-full transition-colors duration-300"
-          :class="showPreview ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400'"
-        >
-          <i class="fas fa-image transition-transform duration-300 hover:scale-110"></i>
-        </button>
-        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">{{ showPreview ? '关闭预览' : '开启预览' }}</span>
-      </div>
-      
       <div class="relative group w-8 h-8 flex items-center justify-center">
         <button
           @click="handleAddClick"
@@ -87,12 +76,12 @@
       
       <div class="relative group w-8 h-8 flex items-center justify-center">
         <button 
-          @click="$emit('toggleDarkMode')" 
+          @click="$emit('toggle-dark-mode')"
           class="w-full h-full flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300"
         >
-          <i class="fas hover:rotate-12 transition-transform" :class="darkMode ? 'fa-sun' : 'fa-moon' "></i>
+          <i class="fas transition-transform duration-300" :class="darkMode ? 'fa-sun' : 'fa-moon'"></i>
         </button>
-        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">{{ darkMode ? '浅色模式' : '暗黑模式' }}</span>
+        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-center">{{ darkMode ? '浅色模式' : '深色模式' }}</span>
       </div>
     </div>
     
@@ -126,8 +115,8 @@ export default {
     PasswordDialog,
     AddWebsiteDialog
   },
-  emits: ['toggleDarkMode', 'submit-website', 'toggle-preview'],
-  props: ['darkMode', 'categories', 'showPreview'],
+  emits: ['toggle-dark-mode', 'submit-website'],
+  props: ['darkMode', 'categories'],
   data() {
     return {
       showEngines: false,

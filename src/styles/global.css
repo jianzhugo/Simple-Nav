@@ -3,7 +3,7 @@
 }
 
 .dark body {
-  background-color: #111827 !important;
+  background-color: #111827;
   color: #e5e7eb !important;
 }
 
@@ -49,4 +49,164 @@
 
 .dark .shadow-md {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ========== 液态玻璃主题 ========== */
+
+/* 玻璃·浅色 — 文字颜色 */
+[data-theme="glass"]:not(.dark) body {
+  color: #1e293b !important;
+}
+
+/* 玻璃·深色 — 文字颜色 */
+[data-theme="glass"].dark body {
+  color: #e2e8f0 !important;
+}
+
+/* 玻璃通用 — 导航栏 */
+[data-theme="glass"] nav {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="glass"].dark nav {
+  background: rgba(15, 23, 42, 0.5) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 玻璃通用 — 侧边栏 */
+[data-theme="glass"] aside {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 4px 0 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="glass"].dark aside {
+  background: rgba(15, 23, 42, 0.45) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 4px 0 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 玻璃通用 — 卡片 */
+[data-theme="glass"] .card-container {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(16px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="glass"] .card-container:hover {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="glass"].dark .card-container {
+  background: rgba(30, 41, 59, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="glass"].dark .card-container:hover {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 玻璃通用 — 对话框 */
+[data-theme="glass"] .bg-white.dark\:bg-gray-800,
+[data-theme="glass"] [class*="bg-white"][class*="rounded-lg"][class*="shadow-xl"] {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="glass"].dark .bg-white.dark\:bg-gray-800,
+[data-theme="glass"].dark [class*="bg-white"][class*="rounded-lg"][class*="shadow-xl"] {
+  background: rgba(15, 23, 42, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 玻璃通用 — 设置页卡片 */
+[data-theme="glass"] .bg-white.p-6.rounded-lg.shadow,
+[data-theme="glass"] .bg-white.dark\:bg-gray-800.p-6.rounded-lg.shadow,
+[data-theme="glass"] .bg-white.dark\:bg-gray-800.rounded-lg.shadow {
+  background: rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="glass"].dark .bg-white.p-6.rounded-lg.shadow,
+[data-theme="glass"].dark .bg-white.dark\:bg-gray-800.p-6.rounded-lg.shadow,
+[data-theme="glass"].dark .bg-white.dark\:bg-gray-800.rounded-lg.shadow {
+  background: rgba(15, 23, 42, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 玻璃通用 — 输入框 */
+[data-theme="glass"] input,
+[data-theme="glass"] select,
+[data-theme="glass"] textarea {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+[data-theme="glass"].dark input,
+[data-theme="glass"].dark select,
+[data-theme="glass"].dark textarea {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 玻璃通用 — 按钮 */
+[data-theme="glass"] button.bg-gray-200,
+[data-theme="glass"] a.bg-gray-100 {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-theme="glass"].dark button.bg-gray-200,
+[data-theme="glass"].dark a.bg-gray-100 {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 玻璃通用 — 预览区域 */
+[data-theme="glass"] .preview-area {
+  background: transparent !important;
+}
+
+[data-theme="glass"].dark .preview-area {
+  background: transparent !important;
+}
+
+/* 玻璃通用 — 预览图边框 */
+[data-theme="glass"] .preview-image {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="glass"].dark .preview-image {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 玻璃通用 — 遮罩层 */
+[data-theme="glass"] .bg-black.bg-opacity-50 {
+  background: rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
 }

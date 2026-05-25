@@ -1,7 +1,6 @@
 <template>
   <div class="h-screen flex flex-col">
-    <router-view></router-view>
-    <div class="flex flex-1 overflow-hidden relative">
+    <div v-if="$route.path === '/'" class="flex flex-1 overflow-hidden relative">
       <Sidebar 
         :categories="categories" 
         :isCollapsed="isSidebarCollapsed"
@@ -12,10 +11,8 @@
         <Navbar 
           :darkMode="darkMode" 
           :categories="categories"
-          :showPreview="showPreview"
           @toggle-dark-mode="toggleDarkMode" 
           @submit-website="handleSubmitWebsite"
-          @toggle-preview="togglePreview"
           class="mb-6"/>
         
         <div class="flex-grow">
@@ -63,6 +60,10 @@
       </main>
     </div>
     
+    <router-view v-else></router-view>
+    
+    <FloatingToolbar :theme="theme" :showPreview="showPreview" @change-theme="handleChangeTheme" @toggle-preview="togglePreview" />
+    
     <Teleport to="body">
       <PasswordDialog
         :visible="showPasswordDialog"
@@ -94,11 +95,13 @@ html, body {
 <script>
 import { fetchData, addWebsite, deleteWebsite, updateWebsite } from './api/fetchData';
 import { isPasswordValidated } from './utils/auth';
+import { getTheme, setTheme, applyTheme, applyBackground, getDarkMode, toggleDarkMode } from './utils/theme';
 import Navbar from './components/Navbar.vue';
 import Sidebar from './components/Sidebar.vue';
 import Card from './components/Card.vue';
 import Footer from './components/Footer.vue';
 import AdBanner from './components/AdBanner.vue';
+import FloatingToolbar from './components/FloatingToolbar.vue';
 import PasswordDialog from './components/PasswordDialog.vue';
 import EditWebsiteDialog from './components/EditWebsiteDialog.vue';
 
@@ -109,6 +112,7 @@ export default {
     Card, 
     Footer,
     AdBanner,
+    FloatingToolbar,
     PasswordDialog,
     EditWebsiteDialog
   },
@@ -118,7 +122,8 @@ export default {
       items: [],
       categories: [],
       selectedCategory: null,
-      darkMode: localStorage.getItem('darkMode') === 'true',
+      theme: getTheme(),
+      darkMode: getDarkMode(),
       isSidebarCollapsed: window.innerWidth < 768,
       loading: false,
       error: null,
@@ -158,21 +163,19 @@ export default {
     filterByCategory(category) {
       this.selectedCategory = category;
     },
+    handleChangeTheme(newTheme) {
+      this.theme = newTheme;
+      setTheme(newTheme);
+    },
     toggleDarkMode() {
-      this.darkMode = !this.darkMode;
-      if (this.darkMode) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      localStorage.setItem('darkMode', this.darkMode);
+      this.darkMode = toggleDarkMode();
     },
     toggleSidebar() {
       this.isSidebarCollapsed = !this.isSidebarCollapsed;
     },
     togglePreview() {
       this.showPreview = !this.showPreview;
-      localStorage.setItem('showPreview', this.showPreview);
+      localStorage.setItem('showPreview', String(this.showPreview));
     },
     async handleSubmitWebsite(websiteData) {
       try {
@@ -249,21 +252,8 @@ export default {
     this.loadData();
   },
   mounted() {
-    if (this.darkMode) {
-      document.documentElement.classList.add('dark');
-    }
-    
-    const savedBg = localStorage.getItem('background')
-    const savedImage = localStorage.getItem('backgroundImage')
-    
-    if (savedBg) {
-      document.body.style.backgroundColor = savedBg
-    } else if (savedImage) {
-      document.body.style.backgroundImage = `url('${savedImage}')`
-      document.body.style.backgroundSize = 'cover'
-      document.body.style.backgroundPosition = 'center'
-      document.body.style.backgroundRepeat = 'no-repeat'
-    }
+    applyTheme(this.theme, this.darkMode);
+    applyBackground(this.theme, this.darkMode);
     
     window.addEventListener('resize', this.handleResize)
   },

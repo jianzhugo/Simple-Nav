@@ -52,6 +52,7 @@
 
 <script>
 import { fetchData } from '../api/fetchData';
+import { getDarkMode, toggleDarkMode } from '../utils/theme';
 import Navbar from '../components/Navbar.vue';
 import Sidebar from '../components/Sidebar.vue';
 import Card from '../components/Card.vue';
@@ -64,7 +65,7 @@ export default {
       loading: true,
       searchQuery: '',
       allItems: [],
-      darkMode: localStorage.getItem('darkMode') === 'true',
+      darkMode: getDarkMode(),
       isSidebarCollapsed: window.innerWidth < 768,
       categories: [],
       error: null
@@ -103,13 +104,7 @@ export default {
       }
     },
     toggleDarkMode() {
-      this.darkMode = !this.darkMode;
-      if (this.darkMode) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      localStorage.setItem('darkMode', this.darkMode);
+      this.darkMode = toggleDarkMode();
     },
     toggleSidebar() {
       this.isSidebarCollapsed = !this.isSidebarCollapsed;

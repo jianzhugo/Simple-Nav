@@ -15,13 +15,12 @@
       </div>
     </div>
     
-    <div v-if="showPreview && previewState !== 'error'" ref="previewArea" class="preview-area relative w-full flex-1 min-h-0 hidden sm:block overflow-hidden">
+    <div v-if="previewState !== 'error'" v-show="showPreview" ref="previewArea" class="preview-area relative w-full flex-1 min-h-0 hidden sm:block overflow-hidden">
       <img
         v-if="previewSrc"
         :src="previewSrc"
         alt="preview"
         class="preview-image"
-        loading="lazy"
         @load="onPreviewLoad"
         @error="onPreviewError"
       />
@@ -174,7 +173,9 @@ export default {
     }
   },
   mounted() {
-    this.setupLazyLoad();
+    if (this.showPreview) {
+      this.setupLazyLoad();
+    }
   },
   beforeUnmount() {
     if (this.observer) {
@@ -184,8 +185,6 @@ export default {
   watch: {
     showPreview(val) {
       if (val) {
-        this.previewState = 'idle';
-        this.previewSrc = null;
         this.$nextTick(() => {
           this.setupLazyLoad();
         });

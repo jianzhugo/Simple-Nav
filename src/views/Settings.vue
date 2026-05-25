@@ -18,40 +18,85 @@
               </h3>
               
               <div class="mb-8">
-                <h4 class="text-lg font-medium mb-4">默认配色方案</h4>
-                <div class="grid grid-cols-3 gap-4">
+                <h4 class="text-lg font-medium mb-4">主题风格</h4>
+                <div class="grid grid-cols-2 gap-4">
+                  <button
+                    v-for="t in themes"
+                    :key="t.key"
+                    @click="changeTheme(t.key)"
+                    class="flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-all cursor-pointer"
+                    :class="currentTheme === t.key ? 'border-blue-500 scale-105 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-600 hover:border-blue-300'"
+                  >
+                    <i :class="'fas ' + t.icon" class="text-2xl" :style="t.key === 'glass' ? 'color: #818cf8' : ''"></i>
+                    <span class="text-sm font-medium">{{ t.label }}</span>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-medium mb-4">背景预设</h4>
+                <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
                   <div 
-                    v-for="color in backgroundColors" 
-                    :key="color"
+                    v-for="preset in backgroundPresets" 
+                    :key="preset.value"
                     class="h-20 rounded-lg cursor-pointer border-2 transition-all"
-                    :class="{ 'border-blue-500 scale-105': selectedBg === color }"
-                    :style="{ backgroundColor: color }"
-                    @click="changeBackground(color)"
+                    :class="{ 'border-blue-500 scale-105': selectedBg === preset.value }"
+                    :style="{ background: preset.value }"
+                    :title="preset.label"
+                    @click="changeBackground(preset.value)"
                   ></div>
                 </div>
               </div>
               
               <div class="mb-8">
                 <h4 class="text-lg font-medium mb-4">自定义颜色</h4>
-                <div class="flex items-center gap-4">
-                  <input 
-                    type="color"
-                    v-model="customColorHex"
-                    class="w-16 h-10 rounded cursor-pointer"
-                  >
-                  <input 
-                    type="text" 
-                    v-model="customColorHex"
-                    placeholder="或输入十六进制颜色码"
-                    class="flex-1 bg-gray-100 dark:bg-gray-700 rounded px-3 py-2"
-                    @keyup.enter="applyCustomColor"
-                  >
-                  <button 
-                    @click="applyCustomColor"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-                  >
-                    应用
-                  </button>
+                <div class="space-y-4">
+                  <div class="flex items-center gap-4">
+                    <label class="text-sm text-gray-600 dark:text-gray-400 w-16">起始色</label>
+                    <input 
+                      type="color"
+                      v-model="gradientStart"
+                      class="w-12 h-10 rounded cursor-pointer"
+                    >
+                    <input 
+                      type="text" 
+                      v-model="gradientStart"
+                      class="w-28 bg-gray-100 dark:bg-gray-700 rounded px-3 py-2 text-sm"
+                    >
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <label class="text-sm text-gray-600 dark:text-gray-400 w-16">结束色</label>
+                    <input 
+                      type="color"
+                      v-model="gradientEnd"
+                      class="w-12 h-10 rounded cursor-pointer"
+                    >
+                    <input 
+                      type="text" 
+                      v-model="gradientEnd"
+                      class="w-28 bg-gray-100 dark:bg-gray-700 rounded px-3 py-2 text-sm"
+                    >
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <label class="text-sm text-gray-600 dark:text-gray-400 w-16">方向</label>
+                    <select v-model="gradientDirection" class="bg-gray-100 dark:bg-gray-700 rounded px-3 py-2 text-sm">
+                      <option value="135deg">左上→右下</option>
+                      <option value="45deg">左下→右上</option>
+                      <option value="90deg">左→右</option>
+                      <option value="180deg">上→下</option>
+                      <option value="to right">水平</option>
+                    </select>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="h-12 flex-1 rounded-lg border" :style="{ background: gradientPreview }"></div>
+                    <button 
+                      @click="applyGradient"
+                      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                    >
+                      应用渐变
+                    </button>
+                  </div>
+                  <p class="text-xs text-gray-400">提示：起始色和结束色相同时为纯色背景</p>
                 </div>
               </div>
               
@@ -159,8 +204,8 @@
                   <h4 class="text-lg font-medium mb-2">选择要导入/导出的配置项：</h4>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <label class="flex items-center gap-2">
-                      <input v-model="exportOptions.darkMode" type="checkbox" class="rounded text-blue-500">
-                      <span class="text-sm text-gray-700 dark:text-gray-300">黑暗模式</span>
+                      <input v-model="exportOptions.theme" type="checkbox" class="rounded text-blue-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">主题设置</span>
                     </label>
                     <label class="flex items-center gap-2">
                       <input v-model="exportOptions.columns" type="checkbox" class="rounded text-blue-500">
@@ -321,15 +366,35 @@
 
 <script>
 import Footer from '../components/Footer.vue'
+import { THEMES, getTheme, setTheme, applyTheme, getDarkMode, getThemeBackground, setThemeBackground, getThemeBackgroundImage, setThemeBackgroundImage, applyBackground } from '../utils/theme'
 
 export default {
   components: { Footer },
   data() {
+    const theme = getTheme()
+    const savedBg = getThemeBackground(theme)
     return {
-      customColorHex: localStorage.getItem('customColor') || '',
-      backgroundImage: localStorage.getItem('backgroundImage') || '',
-      backgroundColors: ['#ffffff', '#f3f4f6', '#fef3c7', '#f0fdf4', '#f1f5f9', '#bfc9df'],
-      selectedBg: localStorage.getItem('background') || '#ffffff',
+      currentTheme: theme,
+      themes: THEMES,
+      gradientStart: savedBg || '#ffffff',
+      gradientEnd: savedBg || '#ffffff',
+      gradientDirection: '135deg',
+      backgroundImage: getThemeBackgroundImage(theme),
+      backgroundPresets: [
+        { label: '纯白', value: '#ffffff' },
+        { label: '浅灰', value: '#f3f4f6' },
+        { label: '暖黄', value: '#fef3c7' },
+        { label: '浅绿', value: '#f0fdf4' },
+        { label: '冷灰蓝', value: '#bfc9df' },
+        { label: '淡彩渐变', value: 'linear-gradient(135deg, #e0e7ff, #fce7f3, #e0f2fe)' },
+        { label: '暖阳渐变', value: 'linear-gradient(135deg, #fef3c7, #fed7aa, #fecaca)' },
+        { label: '薄荷渐变', value: 'linear-gradient(135deg, #d1fae5, #a7f3d0, #6ee7b7)' },
+        { label: '深海渐变', value: 'linear-gradient(135deg, #0f172a, #1e3a5f, #1e1b4b)' },
+        { label: '暗夜渐变', value: 'linear-gradient(135deg, #0c1222, #1a1a2e, #0d1117)' },
+        { label: '极光渐变', value: 'linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95)' },
+        { label: '暮色渐变', value: 'linear-gradient(135deg, #1e3a5f, #3b1f5e, #1a1a2e)' },
+      ],
+      selectedBg: savedBg,
       columns: parseInt(localStorage.getItem('columns')) || 5,
       apiKey: localStorage.getItem('apiKey') || '',
       datasheetId: localStorage.getItem('datasheetId') || '',
@@ -362,7 +427,7 @@ export default {
       isIconSettingsExpanded: false,
       showIconDropdown: {},
       exportOptions: {
-        darkMode: true,
+        theme: true,
         columns: true,
         background: true,
         categoryIcons: true,
@@ -373,18 +438,25 @@ export default {
     }
   },
   mounted() {
-    const savedBg = localStorage.getItem('background')
-    const savedImage = localStorage.getItem('backgroundImage')
-    
-    if (savedBg) {
-      this.changeBackground(savedBg)
-    } else if (savedImage) {
-      this.applyBackgroundImage()
-    }
-    
     this.loadCategories()
   },
+  computed: {
+    gradientPreview() {
+      return `linear-gradient(${this.gradientDirection}, ${this.gradientStart}, ${this.gradientEnd})`
+    }
+  },
   methods: {
+    changeTheme(themeKey) {
+      this.currentTheme = themeKey;
+      setTheme(themeKey);
+      
+      const bg = getThemeBackground(themeKey)
+      const bgImage = getThemeBackgroundImage(themeKey)
+      this.selectedBg = bg
+      this.gradientStart = bg || '#ffffff'
+      this.gradientEnd = bg || '#ffffff'
+      this.backgroundImage = bgImage
+    },
     loadCategories() {
       this.loadingCategories = true;
       this.loadError = null;
@@ -454,8 +526,8 @@ export default {
           settings: {}
         };
         
-        if (this.exportOptions.darkMode) {
-          config.settings.darkMode = localStorage.getItem('darkMode') === 'true';
+        if (this.exportOptions.theme) {
+          config.settings.theme = localStorage.getItem('theme');
         }
         
         if (this.exportOptions.columns) {
@@ -511,8 +583,10 @@ export default {
           
           const { settings } = config;
           
-          if (settings.darkMode !== undefined) {
-            localStorage.setItem('darkMode', settings.darkMode);
+          if (settings.theme !== undefined) {
+            localStorage.setItem('theme', settings.theme);
+            this.currentTheme = settings.theme;
+            applyTheme(settings.theme);
           }
           
           if (settings.columns) {
@@ -572,49 +646,28 @@ export default {
       reader.readAsText(file);
       event.target.value = '';
     },
-    applyCustomColor() {
-      const colorRegex = /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
-      let color = this.customColorHex.trim()
-      
-      if (!color.startsWith('#')) {
-        color = '#' + color
-      }
-      
-      if (colorRegex.test(color)) {
-        this.customColorHex = color
-        this.changeBackground(color)
-        localStorage.setItem('customColor', color)
-      } else {
-        alert('请输入有效的十六进制颜色码')
-      }
+    applyGradient() {
+      const value = `linear-gradient(${this.gradientDirection}, ${this.gradientStart}, ${this.gradientEnd})`
+      this.changeBackground(value)
     },
     
     applyBackgroundImage() {
       const imageRegex = /\.(jpeg|jpg|png|svg)(\?.*)?$/i
       if (imageRegex.test(this.backgroundImage)) {
-        document.body.style.backgroundImage = `url('${this.backgroundImage}')`
-        document.body.style.backgroundSize = 'cover'
-        document.body.style.backgroundPosition = 'center'
-        document.body.style.backgroundRepeat = 'no-repeat'
-        document.body.style.backgroundColor = ''
-        
-        localStorage.setItem('backgroundImage', this.backgroundImage)
-        localStorage.removeItem('background')
-        localStorage.removeItem('customColor')
+        setThemeBackground(this.currentTheme, '')
+        setThemeBackgroundImage(this.currentTheme, this.backgroundImage)
+        this.selectedBg = ''
+        applyBackground(this.currentTheme, getDarkMode())
       } else {
         alert('请输入有效的图片URL，支持jpg/png/svg格式')
       }
     },
     
-    changeBackground(color) {
-      this.selectedBg = color
-      this.customColorHex = color
-      document.body.style.backgroundColor = color
-      document.body.style.backgroundImage = 'none'
-      
-      localStorage.setItem('background', color)
-      localStorage.setItem('customColor', color)
-      localStorage.removeItem('backgroundImage')
+    changeBackground(value) {
+      this.selectedBg = value
+      setThemeBackground(this.currentTheme, value)
+      setThemeBackgroundImage(this.currentTheme, '')
+      applyBackground(this.currentTheme, getDarkMode())
     },
     saveSettings() {
       localStorage.setItem('columns', this.columns)
