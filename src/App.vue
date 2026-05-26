@@ -188,6 +188,14 @@ export default {
     handleResize() {
       this.isSidebarCollapsed = window.innerWidth < 768;
     },
+    handleGlobalClick(event) {
+      const sidebar = document.querySelector('.sidebar-container');
+      const cards = document.querySelectorAll('.card-container');
+      if (!sidebar?.contains(event.target) &&
+          !Array.from(cards).some(card => card.contains(event.target))) {
+        this.selectedCategory = null;
+      }
+    },
     handleFavoriteChanged() {
       this.$forceUpdate();
     },
@@ -256,8 +264,10 @@ export default {
     applyBackground(this.theme, this.darkMode);
     
     window.addEventListener('resize', this.handleResize)
+    document.addEventListener('click', this.handleGlobalClick);
   },
   beforeUnmount() {
+    document.removeEventListener('click', this.handleGlobalClick);
     window.removeEventListener('resize', this.handleResize);
   }
 };
