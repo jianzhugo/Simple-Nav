@@ -32,14 +32,14 @@
     <div class="card-actions absolute top-1 right-1 flex items-center gap-1 z-10">
       <button 
         @click.prevent.stop="handleEdit"
-        class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-blue-500 transition-all duration-300"
+        class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-blue-500 transition-all duration-300 hidden sm:inline-flex"
         style="font-size: 14px; padding: 2px;"
       >
         <i class="fas fa-pen"></i>
       </button>
       <button 
         @click.prevent.stop="handleDelete"
-        class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-red-500 transition-all duration-300"
+        class="action-btn cursor-pointer text-gray-400 opacity-0 hover:opacity-100 hover:text-red-500 transition-all duration-300 hidden sm:inline-flex"
         style="font-size: 14px; padding: 2px;"
       >
         <i class="fas fa-trash-alt"></i>
